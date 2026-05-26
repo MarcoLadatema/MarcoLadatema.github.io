@@ -1,0 +1,71 @@
+.hata-sayfa {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  min-height: 100vh;
+  gap: 1.5rem;
+}
+
+.hata-kod {
+  font-family: var(--font-başlık);
+  font-size: 7rem;
+  font-weight: 600;
+  line-height: 1;
+  color: var(--renk-vurgu);
+  opacity: 0.3;
+  user-select: none;
+}
+
+.hata-ikon {
+  font-size: 3rem;
+  color: var(--renk-vurgu);
+  margin-bottom: -0.5rem;
+}
+
+.hata-başlık {
+  font-family: var(--font-başlık);
+  font-size: 1.75rem;
+  font-weight: 500;
+  color: var(--renk-metin);
+  margin: 0;
+}
+
+.hata-açıklama {
+  font-size: 1rem;
+  color: var(--renk-metin-ikincil);
+  max-width: 400px;
+  margin: 0;
+}
+
+.hata-buton {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.7rem 1.5rem;
+  background: var(--renk-vurgu);
+  color: var(--renk-arkaplan);
+  border-radius: var(--yarıçap);
+  font-family: var(--font-başlık);
+  font-size: 0.95rem;
+  font-weight: 500;
+  text-decoration: none;
+  transition: background var(--geçiş);
+  margin-top: 0.5rem;
+}
+
+.hata-buton:hover {
+  background: var(--renk-vurgu-koyu);
+  color: var(--renk-arkaplan);
+}
+
+@media (max-width: 768px) {
+  .hata-kod {
+    font-size: 5rem;
+  }
+
+  .hata-başlık {
+    font-size: 1.4rem;
+  }
+}

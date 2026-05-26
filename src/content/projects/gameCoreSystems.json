@@ -1,0 +1,14 @@
+{
+  "tr": {
+    "ad": "Game Core Systems",
+    "açıklama": "Tüm Unity oyun projelerine temel sistem altyapısı sağlayan eklenti paketi."
+  },
+  "en": {
+    "ad": "Game Core Systems",
+    "açıklama": "A plugin package providing core system infrastructure for all Unity game projects."
+  },
+  "kategori": "eklenti",
+  "durum": "gelistiriliyor",
+  "ikon": "ti-package",
+  "sıra": 4
+}

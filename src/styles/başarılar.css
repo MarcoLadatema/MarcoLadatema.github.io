@@ -1,0 +1,65 @@
+/* #region Zaman Çizelgesi */
+
+.zaman-cizelgesi {
+  position: relative;
+  padding-left: 1.5rem;
+  border-left: 1px solid var(--renk-kenar);
+  display: flex;
+  flex-direction: column;
+  gap: 2rem;
+  margin-top: 2rem;
+}
+
+.zaman-ogesi {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.zaman-nokta {
+  position: absolute;
+  left: -1.85rem;
+  top: 5px;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  border: 2px solid var(--renk-arkaplan);
+}
+
+.zaman-tarih {
+  font-family: var(--font-başlık);
+  font-size: 0.8rem;
+  letter-spacing: 0.05em;
+}
+
+.zaman-ad {
+  font-family: var(--font-başlık);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--renk-metin);
+}
+
+.zaman-aciklama {
+  font-size: 0.9rem;
+  color: var(--renk-metin-ikincil);
+  line-height: 1.6;
+  margin-bottom: 4px;
+}
+
+.zaman-rozet {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-size: 0.75rem;
+  padding: 3px 10px;
+  border-radius: 100px;
+  border: 0.5px solid;
+  width: fit-content;
+}
+
+.zaman-rozet i {
+  font-size: 0.85rem;
+}
+
+/* #endregion */

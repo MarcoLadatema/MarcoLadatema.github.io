@@ -1,0 +1,56 @@
+---
+import TemelDüzen from "../../../layouts/TemelDüzen.astro";
+import "../../../styles/blog.css";
+import { getCollection, render } from "astro:content";
+import { çeviriAl, dilAl, type Dil } from "../../../i18n/utils";
+
+export async function getStaticPaths() {
+  const yazılar = await getCollection("blog");
+  return yazılar.map((yazı) => ({
+    params: {
+      lang: yazı.data.dil,
+      kimlik: yazı.id.replace(`.${yazı.data.dil}.md`, ""),
+    },
+    props: { yazı },
+  }));
+}
+
+const { yazı } = Astro.props;
+const dil = dilAl(Astro.url) as Dil;
+const t = çeviriAl(dil);
+
+const { Content } = await render(yazı);
+const veri = yazı.data;
+const tarihDili = dil === "tr" ? "tr-TR" : "en-US";
+---
+
+<TemelDüzen başlık={veri.başlık} dil={dil} açıklama={veri.açıklama}>
+  <div class="blog-yazı">
+    <a href={`/${dil}/blog`} class="geri-bağlantı">{t.blog["blogaDön"]}</a>
+
+    <div class="blog-yazı-üst">
+      <div class="blog-yazı-tarih">
+        {
+          veri.tarih.toLocaleDateString(tarihDili, {
+            year: "numeric",
+            month: "long",
+            day: "numeric",
+          })
+        }
+      </div>
+      <h1>{veri.başlık}</h1>
+      <p class="blog-yazı-açıklama">{veri.açıklama}</p>
+      <div class="blog-karti-etiketler">
+        {
+          veri.etiketler.map((etiket) => (
+            <span class="blog-etiket">{etiket}</span>
+          ))
+        }
+      </div>
+    </div>
+
+    <div class="blog-yazı-içerik">
+      <Content />
+    </div>
+  </div>
+</TemelDüzen>

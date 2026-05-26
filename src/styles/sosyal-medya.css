@@ -1,0 +1,157 @@
+/* #region Sosyal Medya */
+
+.sosyal-medya-sayfa {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.one-cikan-platform {
+  background: var(--renk-yüzey);
+  border: 1px solid rgba(126, 200, 227, 0.3);
+  border-radius: var(--yarıçap);
+  padding: 1.25rem;
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  text-decoration: none;
+  transition: border-color var(--geçiş);
+}
+
+.one-cikan-platform:hover {
+  border-color: var(--renk-vurgu);
+}
+
+.one-cikan-ikon {
+  width: 52px;
+  height: 52px;
+  border-radius: var(--yarıçap);
+  background: rgba(126, 200, 227, 0.1);
+  border: 0.5px solid rgba(126, 200, 227, 0.3);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition:
+    background var(--geçiş),
+    border-color var(--geçiş);
+}
+
+.one-cikan-ikon i {
+  font-size: 1.75rem;
+  transition: color var(--geçiş);
+}
+
+.one-cikan-bilgi {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+}
+
+.one-cikan-platform-adi {
+  font-family: var(--font-başlık);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--renk-metin);
+}
+
+.one-cikan-kullanici-adi {
+  font-size: 0.85rem;
+  color: var(--renk-vurgu);
+}
+
+.one-cikan-aciklama {
+  font-size: 0.875rem;
+  color: var(--renk-metin-ikincil);
+  margin-top: 2px;
+}
+
+.one-cikan-link-ikonu {
+  font-size: 1.1rem;
+  color: var(--renk-metin-ikincil);
+  flex-shrink: 0;
+}
+
+.platform-izgara {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 0.75rem;
+}
+
+.mini-platform-kart {
+  position: relative;
+  background: var(--renk-yüzey);
+  border: 0.5px solid var(--renk-kenar);
+  border-radius: var(--yarıçap);
+  padding: 0.875rem 0.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  cursor: pointer;
+  transition:
+    border-color var(--geçiş),
+    transform var(--geçiş);
+}
+
+.mini-platform-kart i {
+  font-size: 1.5rem;
+  transition: color var(--geçiş);
+}
+
+.mini-platform-kart:hover {
+  border-color: var(--renk-vurgu);
+  transform: translateY(-2px);
+}
+
+.mini-platform-kart[data-hazır="false"]::after {
+  content: "Henüz Hazır Değil";
+  position: absolute;
+  top: -8px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: var(--renk-kenar);
+  color: var(--renk-metin-ikincil);
+  font-size: 0.6rem;
+  font-family: var(--font-başlık);
+  white-space: nowrap;
+  padding: 2px 6px;
+  border-radius: 4px;
+  pointer-events: none;
+}
+
+.mini-platform-kart.aktif {
+  border-color: var(--renk-vurgu);
+}
+
+.mini-platform-adi {
+  font-size: 0.75rem;
+  color: var(--renk-metin-ikincil);
+  font-family: var(--font-başlık);
+}
+
+@media (max-width: 768px) {
+  .platform-izgara {
+    grid-template-columns: repeat(3, 1fr);
+  }
+}
+
+/* #endregion */
+/* #region Açık Tema Uyumu */
+
+[data-tema="açık"] .mini-platform-kart i[style*="color: rgb(255, 255, 255)"],
+[data-tema="açık"] .mini-platform-kart i[style*="color: #ffffff"],
+[data-tema="açık"] #one-cikan-ikon[style*="color: rgb(255, 255, 255)"],
+[data-tema="açık"] #one-cikan-ikon[style*="color: #ffffff"] {
+  color: #1a2633 !important;
+}
+
+[data-tema="açık"] #one-cikan-ikon-kap[style*="background: rgb(255, 255, 255)"],
+[data-tema="açık"] #one-cikan-ikon-kap[style*="background: #ffffff"] {
+  background: rgba(26, 38, 51, 0.08) !important;
+  border-color: rgba(26, 38, 51, 0.2) !important;
+}
+
+/* #endregion */

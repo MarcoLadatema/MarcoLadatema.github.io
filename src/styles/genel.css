@@ -1,0 +1,217 @@
+/*
+  ============================================
+  MARCO LA'DATEMA — Ana Stil Dosyası
+  ============================================ 
+*/
+
+@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Inter:wght@400;500&display=swap");
+
+/* #region Tema Değişkenleri */
+
+:root,
+[data-tema="koyu"] {
+  --renk-arkaplan: #141d26;
+  --renk-yüzey: #1e2d3d;
+  --renk-kenar: #2d4158;
+  --renk-vurgu: #7ec8e3;
+  --renk-vurgu-koyu: #5aadc8;
+  --renk-metin: #e8f0f7;
+  --renk-metin-ikincil: #8ba8bf;
+
+  --font-başlık: "Outfit", sans-serif;
+  --font-gövde: "Inter", sans-serif;
+
+  --geçiş: 0.2s ease;
+  --yarıçap: 8px;
+}
+
+[data-tema="açık"] {
+  --renk-arkaplan: #f0f4f8;
+  --renk-yüzey: #ffffff;
+  --renk-kenar: #d0dce8;
+  --renk-vurgu: #2d7d9a;
+  --renk-vurgu-koyu: #1a6080;
+  --renk-metin: #1a2633;
+  --renk-metin-ikincil: #4a6580;
+}
+
+[data-tema="açık"] .gezinti {
+  background-color: rgba(240, 244, 248, 0.95);
+}
+
+[data-tema="açık"] .mobil-menü {
+  background-color: rgba(240, 244, 248, 0.98);
+}
+
+[data-tema="açık"] ::-webkit-scrollbar-track {
+  background: #f0f4f8;
+}
+
+[data-tema="açık"] ::-webkit-scrollbar-thumb {
+  background: #d0dce8;
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-tema]) {
+    --renk-arkaplan: #f0f4f8;
+    --renk-yüzey: #ffffff;
+    --renk-kenar: #d0dce8;
+    --renk-vurgu: #2d7d9a;
+    --renk-vurgu-koyu: #1a6080;
+    --renk-metin: #1a2633;
+    --renk-metin-ikincil: #4a6580;
+  }
+}
+
+@media (prefers-color-scheme: light) {
+  :root:not([data-tema]) .gezinti {
+    background-color: rgba(240, 244, 248, 0.95);
+  }
+
+  :root:not([data-tema]) .mobil-menü {
+    background-color: rgba(240, 244, 248, 0.98);
+  }
+
+  :root:not([data-tema]) ::-webkit-scrollbar-track {
+    background: #f0f4f8;
+  }
+
+  :root:not([data-tema]) ::-webkit-scrollbar-thumb {
+    background: #d0dce8;
+  }
+  :root:not([data-tema])
+    .mini-platform-kart
+    i[style*="color: rgb(255, 255, 255)"],
+  :root:not([data-tema]) .mini-platform-kart i[style*="color: #ffffff"],
+  :root:not([data-tema]) #one-cikan-ikon[style*="color: rgb(255, 255, 255)"],
+  :root:not([data-tema]) #one-cikan-ikon[style*="color: #ffffff"] {
+    color: #1a2633 !important;
+  }
+}
+
+/* #endregion */
+/* #region Sıfırlama */
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: var(--renk-arkaplan);
+  color: var(--renk-metin);
+  font-family: var(--font-gövde);
+  font-size: 16px;
+  line-height: 1.6;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+/* #endregion */
+/* #region Tipografi */
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: var(--font-başlık);
+  font-weight: 500;
+  line-height: 1.3;
+  color: var(--renk-metin);
+}
+
+h1 {
+  font-size: 2.5rem;
+}
+h2 {
+  font-size: 2rem;
+}
+h3 {
+  font-size: 1.5rem;
+}
+
+p {
+  color: var(--renk-metin-ikincil);
+  margin-bottom: 1rem;
+}
+
+a {
+  color: var(--renk-vurgu);
+  text-decoration: none;
+  transition: color var(--geçiş);
+}
+
+a:hover {
+  color: var(--renk-metin);
+}
+
+/* #endregion */
+/* #region Düzen */
+
+main {
+  flex: 1;
+  padding: 3rem 2rem;
+  max-width: 1100px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+footer {
+  border-top: 1px solid var(--renk-kenar);
+  padding: 1.5rem 2rem;
+  text-align: center;
+}
+
+footer p {
+  font-size: 0.85rem;
+  color: var(--renk-metin-ikincil);
+  margin: 0;
+}
+
+/* #endregion */
+/* #region Scrollbar */
+
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: var(--renk-arkaplan);
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--renk-kenar);
+  border-radius: 3px;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: var(--renk-metin-ikincil);
+}
+
+/* #endregion */
+/* #region Mobil */
+
+@media (max-width: 768px) {
+  main {
+    padding: 2rem 1rem;
+  }
+
+  h1 {
+    font-size: 1.8rem;
+  }
+  h2 {
+    font-size: 1.5rem;
+  }
+}
+
+/* #endregion */

@@ -1,0 +1,81 @@
+---
+import TemelDüzen from "../../layouts/TemelDüzen.astro";
+import { getCollection } from "astro:content";
+import { çeviriAl, dilAl, type Dil } from "../../i18n/utils";
+import "../../styles/projeler.css";
+
+export function getStaticPaths() {
+  return [{ params: { lang: "tr" } }, { params: { lang: "en" } }];
+}
+
+const dil = dilAl(Astro.url) as Dil;
+const t = çeviriAl(dil);
+
+const tümProjeler = await getCollection("projeler");
+const projeler = tümProjeler.sort((a, b) => {
+  const sıraA = a.data.sıra ?? Infinity;
+  const sıraB = b.data.sıra ?? Infinity;
+  if (sıraA !== sıraB) return sıraA - sıraB;
+  return a.data.tr.ad.localeCompare(b.data.tr.ad, "tr");
+});
+
+const kategorirenkler: Record<string, { kenar: string; metin: string }> = {
+  oyun: { kenar: "#7ec8e3", metin: "#7ec8e3" },
+  uygulama: { kenar: "#7eb8a0", metin: "#7eb8a0" },
+  eklenti: { kenar: "#a07ec8", metin: "#a07ec8" },
+  cihaz: { kenar: "#c8a07e", metin: "#c8a07e" },
+};
+---
+
+<TemelDüzen
+  başlık={t.projeler.başlık}
+  dil={dil}
+  açıklama={t.ogAçıklamalar.projeler}
+>
+  <h1>{t.projeler.başlık}</h1>
+
+  <div class="projeler-izgara">
+    {
+      projeler.map((proje) => {
+        const renk = kategorirenkler[proje.data.kategori];
+        return (
+          <a href={`/${dil}/projects/${proje.id}`} class="proje-karti">
+            <div class="proje-karti-görsel">
+              {proje.data.görseller?.find((g) => g.kapak) ? (
+                <img
+                  src={proje.data.görseller.find((g) => g.kapak)!.yol}
+                  alt={proje.data[dil].ad}
+                />
+              ) : (
+                <div class="yer-tutucu-ikon">
+                  <i class={`ti ${proje.data.ikon}`} aria-hidden="true" />
+                </div>
+              )}
+            </div>
+            <div class="proje-karti-gövde">
+              <div class="proje-karti-başlık">{proje.data[dil].ad}</div>
+              <div class="proje-karti-açıklama">{proje.data[dil].açıklama}</div>
+              <div class="proje-karti-etiketler">
+                <span
+                  class="etiket"
+                  style={`border-color: ${renk.kenar}; color: ${renk.metin};`}
+                >
+                  {t.kategoriler[proje.data.kategori]}
+                </span>
+                <span class={`etiket etiket-${proje.data.durum}`}>
+                  {
+                    t.durumlar[
+                      proje.data.durum === "rafa-kaldirildi"
+                        ? "rafaKaldirildi"
+                        : proje.data.durum
+                    ]
+                  }
+                </span>
+              </div>
+            </div>
+          </a>
+        );
+      })
+    }
+  </div>
+</TemelDüzen>

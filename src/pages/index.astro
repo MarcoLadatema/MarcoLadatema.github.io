@@ -1,0 +1,23 @@
+---
+
+---
+
+<html>
+  <head>
+    <meta charset="UTF-8" />
+    <script>
+      const kaydedilmiş = localStorage.getItem("dil");
+      const tarayıcıDili = navigator.language.substring(0, 2);
+      const desteklenen = ["tr", "en"];
+
+      const hedef = desteklenen.includes(kaydedilmiş ?? "")
+        ? kaydedilmiş
+        : desteklenen.includes(tarayıcıDili)
+          ? tarayıcıDili
+          : "tr";
+
+      window.location.replace("/" + hedef + "/");
+    </script>
+  </head>
+  <body></body>
+</html>

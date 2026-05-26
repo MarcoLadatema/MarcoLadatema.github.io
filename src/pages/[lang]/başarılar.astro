@@ -1,0 +1,73 @@
+---
+import TemelDüzen from "../../layouts/TemelDüzen.astro";
+import "../../styles/başarılar.css";
+import { getCollection } from "astro:content";
+import { çeviriAl, dilAl, type Dil } from "../../i18n/utils";
+
+export function getStaticPaths() {
+  return [{ params: { lang: "tr" } }, { params: { lang: "en" } }];
+}
+
+const dil = dilAl(Astro.url) as Dil;
+const t = çeviriAl(dil);
+
+const başarılar = await getCollection("başarılar");
+
+const sıralıBaşarılar = başarılar.sort(
+  (a, b) => parseInt(b.data.tarih) - parseInt(a.data.tarih),
+);
+
+const türikonu: Record<string, string> = {
+  ödül: "ti-trophy",
+  "kilometre-taşı": "ti-flag",
+  yayın: "ti-rocket",
+};
+
+const türrengi: Record<string, string> = {
+  ödül: "#c8a07e",
+  "kilometre-taşı": "#7ec8e3",
+  yayın: "#7eb8a0",
+};
+
+const türetiketi: Record<string, string> = {
+  ödül: dil === "tr" ? "Ödül" : "Award",
+  "kilometre-taşı": dil === "tr" ? "Kilometre Taşı" : "Milestone",
+  yayın: dil === "tr" ? "Yayın" : "Release",
+};
+---
+
+<TemelDüzen
+  başlık={t.başarılar.başlık}
+  dil={dil}
+  açıklama={t.ogAçıklamalar.başarılar}
+>
+  <h1>{t.başarılar.başlık}</h1>
+
+  <div class="zaman-cizelgesi">
+    {
+      sıralıBaşarılar.map((başarı) => {
+        const veri = başarı.data;
+        const renk = türrengi[veri.tür];
+        const etiket = türetiketi[veri.tür];
+
+        return (
+          <div class="zaman-ogesi">
+            <div class="zaman-nokta" style={`background: ${renk};`} />
+            <div class="zaman-tarih" style={`color: ${renk};`}>
+              {veri.tarih}
+            </div>
+            <div class="zaman-ad">{veri[dil].ad}</div>
+            <div class="zaman-aciklama">{veri[dil].açıklama}</div>
+            <span
+              class="zaman-rozet"
+              style={`border-color: ${renk}40; color: ${renk}; background: ${renk}12;`}
+            >
+              <i class={`ti ${türikonu[veri.tür]}`} aria-hidden="true" />
+              {etiket}
+            </span>
+          </div>
+        );
+      })
+    }
+  </div>
+</TemelDüzen>

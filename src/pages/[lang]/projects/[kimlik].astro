@@ -1,0 +1,397 @@
+---
+import TemelDüzen from "../../../layouts/TemelDüzen.astro";
+import { getCollection, getEntry } from "astro:content";
+import { çeviriAl, dilAl, type Dil } from "../../../i18n/utils";
+import "../../../styles/projeler.css";
+
+export async function getStaticPaths() {
+  const projeler = await getCollection("projeler");
+  const diller = ["tr", "en"];
+  return projeler.flatMap((proje) =>
+    diller.map((dil) => ({ params: { lang: dil, kimlik: proje.id } })),
+  );
+}
+
+const { kimlik } = Astro.params;
+const dil = dilAl(Astro.url) as Dil;
+const t = çeviriAl(dil);
+
+const proje = await getEntry("projeler", kimlik);
+
+if (!proje) {
+  return Astro.redirect(`/${dil}/projeler`);
+}
+
+const veri = proje.data;
+
+const kategorirenkler: Record<string, { kenar: string; metin: string }> = {
+  oyun: { kenar: "#7ec8e3", metin: "#7ec8e3" },
+  uygulama: { kenar: "#7eb8a0", metin: "#7eb8a0" },
+  eklenti: { kenar: "#a07ec8", metin: "#a07ec8" },
+  cihaz: { kenar: "#c8a07e", metin: "#c8a07e" },
+};
+
+const renk = kategorirenkler[veri.kategori];
+
+const detayGörseller =
+  veri.görseller?.filter((g) => g.detaydaGöster !== false) ?? [];
+
+const bağlıBaşarılar = veri.bağlıBaşarılar
+  ? await Promise.all(
+      veri.bağlıBaşarılar.map((id) => getEntry("başarılar", id)),
+    ).then((sonuçlar) =>
+      sonuçlar.filter((b) => b !== undefined && b.data.tür === "ödül"),
+    )
+  : [];
+---
+
+<TemelDüzen
+  başlık={veri[dil].ad}
+  dil={dil}
+  açıklama={veri[dil].açıklama}
+  ogGörsel={veri.görseller?.find((g) => g.kapak)?.yol}
+>
+  <div class="proje-detay">
+    <a href={`/${dil}/projeler`} class="geri-bağlantı"
+      >{t.projeler.projelereGit}</a
+    >
+
+    <div class="proje-detay-içerik">
+      <h1 class="proje-detay-ad">{veri[dil].ad}</h1>
+      <p class="proje-detay-açıklama">{veri[dil].açıklama}</p>
+
+      <div class="proje-karti-etiketler">
+        <span
+          class="etiket"
+          style={`border-color: ${renk.kenar}; color: ${renk.metin};`}
+        >
+          {t.kategoriler[veri.kategori]}
+        </span>
+        <span class={`etiket etiket-${veri.durum}`}>
+          {
+            t.durumlar[
+              veri.durum === "rafa-kaldirildi" ? "rafaKaldirildi" : veri.durum
+            ]
+          }
+        </span>
+      </div>
+
+      {
+        bağlıBaşarılar.length > 0 && (
+          <div class="proje-bağlı-başarılar">
+            {bağlıBaşarılar.map((başarı) => (
+              <div class="proje-başarı-rozeti">
+                <i class={`ti ${başarı!.data.ikon}`} aria-hidden="true" />
+                <span>{başarı!.data[dil].ad}</span>
+              </div>
+            ))}
+          </div>
+        )
+      }
+
+      {
+        detayGörseller.length > 0 && (
+          <>
+            <hr class="proje-ayraç" />
+            <div class="proje-galeri-sistem" id="galeri">
+              <div class="proje-galeri-ana" id="galeri-ana">
+                <img
+                  src={detayGörseller[0].yol}
+                  alt={veri[dil].ad}
+                  id="galeri-ana-gorsel"
+                />
+              </div>
+              {detayGörseller.length > 1 && (
+                <div class="proje-galeri-şerit-kap">
+                  <button
+                    class="galeri-ok galeri-ok-sol"
+                    id="galeri-sol"
+                    aria-label="Önceki"
+                  >
+                    <i class="ti ti-chevron-left" aria-hidden="true" />
+                  </button>
+                  <div class="proje-galeri-şerit" id="galeri-şerit">
+                    {detayGörseller.map((gorsel, i) => (
+                      <img
+                        src={gorsel.yol}
+                        alt={veri[dil].ad}
+                        class={i === 0 ? "secili" : ""}
+                        data-index={i}
+                        data-yol={gorsel.yol}
+                      />
+                    ))}
+                  </div>
+                  <button
+                    class="galeri-ok galeri-ok-sag"
+                    id="galeri-sag"
+                    aria-label="Sonraki"
+                  >
+                    <i class="ti ti-chevron-right" aria-hidden="true" />
+                  </button>
+                </div>
+              )}
+            </div>
+          </>
+        )
+      }
+
+      {
+        veri.detaylıAçıklama && (
+          <>
+            <hr class="proje-ayraç" />
+            <div class="proje-detaylı-açıklama">
+              {veri.detaylıAçıklama[dil].split("\n\n").map((paragraf) => (
+                <p>{paragraf}</p>
+              ))}
+            </div>
+          </>
+        )
+      }
+    </div>
+  </div>
+
+  <div class="galeri-lightbox" id="lightbox" aria-hidden="true">
+    <button class="lightbox-kapat" id="lightbox-kapat" aria-label="Kapat">
+      <i class="ti ti-x" aria-hidden="true"></i>
+    </button>
+    <div class="lightbox-içerik">
+      <button
+        class="lightbox-ok lightbox-ok-sol"
+        id="lightbox-sol"
+        aria-label="Önceki"
+      >
+        <i class="ti ti-chevron-left" aria-hidden="true"></i>
+      </button>
+      <div class="lightbox-görsel-alan" id="lightbox-alan">
+        <img src="" alt="" id="lightbox-gorsel" />
+      </div>
+      <button
+        class="lightbox-ok lightbox-ok-sag"
+        id="lightbox-sag"
+        aria-label="Sonraki"
+      >
+        <i class="ti ti-chevron-right" aria-hidden="true"></i>
+      </button>
+    </div>
+  </div>
+</TemelDüzen>
+
+<script>
+  const anaGorsel = document.getElementById(
+    "galeri-ana-gorsel",
+  ) as HTMLImageElement;
+  const anaGaleri = document.getElementById("galeri-ana") as HTMLElement;
+  const şerit = document.getElementById("galeri-şerit");
+  const solOk = document.getElementById("galeri-sol") as HTMLButtonElement;
+  const sagOk = document.getElementById("galeri-sag") as HTMLButtonElement;
+  const lightbox = document.getElementById("lightbox") as HTMLElement;
+  const lightboxGorsel = document.getElementById(
+    "lightbox-gorsel",
+  ) as HTMLImageElement;
+  const lightboxKapat = document.getElementById(
+    "lightbox-kapat",
+  ) as HTMLButtonElement;
+
+  let mevcutIndex = 0;
+  const çokluGörsel = şerit !== null;
+
+  function görselleriAl(): HTMLImageElement[] {
+    if (!şerit) return [];
+    return Array.from(şerit.querySelectorAll("img"));
+  }
+
+  function okGüncelle() {
+    const toplam = görselleriAl().length;
+    if (çokluGörsel) {
+      if (solOk)
+        solOk.style.visibility = mevcutIndex === 0 ? "hidden" : "visible";
+      if (sagOk)
+        sagOk.style.visibility =
+          mevcutIndex === toplam - 1 ? "hidden" : "visible";
+    }
+    const lightboxSolEl = document.getElementById(
+      "lightbox-sol",
+    ) as HTMLButtonElement;
+    const lightboxSagEl = document.getElementById(
+      "lightbox-sag",
+    ) as HTMLButtonElement;
+    if (lightboxSolEl)
+      lightboxSolEl.style.visibility = mevcutIndex === 0 ? "hidden" : "visible";
+    if (lightboxSagEl)
+      lightboxSagEl.style.visibility =
+        mevcutIndex === toplam - 1 ? "hidden" : "visible";
+  }
+
+  function seçiliGüncelle(index: number) {
+    const görseller = görselleriAl();
+    if (!görseller.length) return;
+    mevcutIndex = index;
+    const yol = görseller[index].dataset.yol ?? "";
+    anaGorsel.src = yol;
+    görseller.forEach((g, i) => g.classList.toggle("secili", i === index));
+    const kartGenişlik = 130;
+    şerit?.scrollTo({
+      left: Math.max(0, index * kartGenişlik - kartGenişlik),
+      behavior: "smooth",
+    });
+    okGüncelle();
+  }
+
+  function lightboxAç() {
+    lightboxGorsel.src = anaGorsel.src;
+    lightbox.classList.add("açık");
+    lightbox.setAttribute("aria-hidden", "false");
+    lightboxGorsel.onload = () => boyutlarıGüncelle();
+    if (lightboxGorsel.complete) boyutlarıGüncelle();
+  }
+
+  function lightboxKapat2() {
+    lightbox.classList.remove("açık");
+    lightbox.setAttribute("aria-hidden", "true");
+    zoomSıfırla();
+  }
+
+  function lightboxGezin(yön: number) {
+    if (!çokluGörsel) return;
+    const toplam = görselleriAl().length;
+    const yeniIndex = mevcutIndex + yön;
+    if (yeniIndex >= 0 && yeniIndex < toplam) {
+      zoomSıfırla();
+      seçiliGüncelle(yeniIndex);
+      lightboxGorsel.src = anaGorsel.src;
+      lightboxGorsel.onload = () => boyutlarıGüncelle();
+      if (lightboxGorsel.complete) boyutlarıGüncelle();
+    }
+  }
+
+  anaGaleri?.addEventListener("click", () => lightboxAç());
+
+  görselleriAl().forEach((gorsel, i) => {
+    gorsel.addEventListener("click", () => seçiliGüncelle(i));
+  });
+
+  solOk?.addEventListener("click", () => {
+    if (mevcutIndex > 0) seçiliGüncelle(mevcutIndex - 1);
+  });
+
+  sagOk?.addEventListener("click", () => {
+    const toplam = görselleriAl().length;
+    if (mevcutIndex < toplam - 1) seçiliGüncelle(mevcutIndex + 1);
+  });
+
+  lightboxKapat?.addEventListener("click", () => lightboxKapat2());
+
+  lightbox?.addEventListener("click", (e) => {
+    if (e.target === lightbox) lightboxKapat2();
+  });
+
+  document.addEventListener("keydown", (e) => {
+    if (!lightbox.classList.contains("açık")) return;
+    if (e.key === "Escape") lightboxKapat2();
+    if (e.key === "ArrowLeft") lightboxGezin(-1);
+    if (e.key === "ArrowRight") lightboxGezin(1);
+  });
+
+  // Lightbox ok butonları
+  const lightboxSol = document.getElementById(
+    "lightbox-sol",
+  ) as HTMLButtonElement;
+  const lightboxSag = document.getElementById(
+    "lightbox-sag",
+  ) as HTMLButtonElement;
+  lightboxSol?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    lightboxGezin(-1);
+  });
+  lightboxSag?.addEventListener("click", (e) => {
+    e.stopPropagation();
+    lightboxGezin(1);
+  });
+
+  okGüncelle();
+
+  // Zoom ve sürükleme sistemi
+  const lightboxAlan = document.getElementById("lightbox-alan") as HTMLElement;
+  let zoom = 1;
+  const MIN_ZOOM = 1;
+  const MAX_ZOOM = 4;
+  let sürükleniyor = false;
+  let başlangıçX = 0;
+  let başlangıçY = 0;
+  let kaydırmaX = 0;
+  let kaydırmaY = 0;
+
+  let alanGenişlik = 0;
+  let alanYükseklik = 0;
+  let görselGenişlik = 0;
+  let görselYükseklik = 0;
+
+  function boyutlarıGüncelle() {
+    alanGenişlik = lightboxAlan.offsetWidth;
+    alanYükseklik = lightboxAlan.offsetHeight;
+    görselGenişlik = lightboxGorsel.naturalWidth;
+    görselYükseklik = lightboxGorsel.naturalHeight;
+  }
+
+  function zoomUygula() {
+    const maxKaydırmaX = Math.max(
+      0,
+      (görselGenişlik * zoom - alanGenişlik) / 2,
+    );
+    const maxKaydırmaY = Math.max(
+      0,
+      (görselYükseklik * zoom - alanYükseklik) / 2,
+    );
+    kaydırmaX = Math.max(-maxKaydırmaX, Math.min(maxKaydırmaX, kaydırmaX));
+    kaydırmaY = Math.max(-maxKaydırmaY, Math.min(maxKaydırmaY, kaydırmaY));
+    lightboxGorsel.style.transform = `translate(${kaydırmaX}px, ${kaydırmaY}px) scale(${zoom})`;
+    lightboxGorsel.style.cursor = zoom > 1 ? "grab" : "default";
+  }
+
+  function zoomSıfırla() {
+    zoom = 1;
+    kaydırmaX = 0;
+    kaydırmaY = 0;
+    zoomUygula();
+  }
+
+  lightboxAlan?.addEventListener(
+    "wheel",
+    (e) => {
+      e.preventDefault();
+      const delta = e.deltaY > 0 ? -0.15 : 0.15;
+      zoom = Math.max(MIN_ZOOM, Math.min(MAX_ZOOM, zoom + delta));
+      if (zoom === MIN_ZOOM) {
+        kaydırmaX = 0;
+        kaydırmaY = 0;
+      }
+      zoomUygula();
+    },
+    { passive: false },
+  );
+
+  lightboxGorsel?.addEventListener("mousedown", (e) => {
+    if (zoom <= 1) return;
+    e.preventDefault();
+    sürükleniyor = true;
+    başlangıçX = e.clientX - kaydırmaX;
+    başlangıçY = e.clientY - kaydırmaY;
+    lightboxGorsel.style.cursor = "grabbing";
+  });
+
+  let animasyonKaresi: number | null = null;
+
+  document.addEventListener("mousemove", (e) => {
+    if (!sürükleniyor) return;
+    kaydırmaX = e.clientX - başlangıçX;
+    kaydırmaY = e.clientY - başlangıçY;
+    if (animasyonKaresi) cancelAnimationFrame(animasyonKaresi);
+    animasyonKaresi = requestAnimationFrame(() => zoomUygula());
+  });
+
+  document.addEventListener("mouseup", () => {
+    if (!sürükleniyor) return;
+    sürükleniyor = false;
+    lightboxGorsel.style.cursor = zoom > 1 ? "grab" : "default";
+  });
+</script>

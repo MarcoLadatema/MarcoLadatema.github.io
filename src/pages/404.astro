@@ -1,0 +1,91 @@
+---
+import "../styles/genel.css";
+import "../styles/hata404.css";
+import { çeviriAl } from "../i18n/utils";
+import YükleniyorAnimasyon from "../components/YükleniyorAnimasyon.astro";
+
+const tr = çeviriAl("tr");
+const en = çeviriAl("en");
+---
+
+<!doctype html>
+<html lang="tr">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>404 — Marco La'datema</title>
+    <link rel="icon" href="/favicon.ico" />
+    <script is:inline>
+      const tema = localStorage.getItem("tema") ?? "otomatik";
+      const koyuMu =
+        tema === "koyu" ||
+        (tema === "otomatik" &&
+          window.matchMedia("(prefers-color-scheme: dark)").matches);
+      document.documentElement.setAttribute(
+        "data-tema",
+        koyuMu ? "koyu" : "açık",
+      );
+    </script>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"
+    />
+  </head>
+  <body>
+    <YükleniyorAnimasyon />
+    <div
+      class="hata-sayfa"
+      data-tr-baslik={tr.hata404.başlık}
+      data-tr-aciklama={tr.hata404.açıklama}
+      data-tr-buton={tr.hata404.anaSayfaButon}
+      data-en-baslik={en.hata404.başlık}
+      data-en-aciklama={en.hata404.açıklama}
+      data-en-buton={en.hata404.anaSayfaButon}
+    >
+      <div class="hata-kod">404</div>
+      <i class="ti ti-map-search hata-ikon" aria-hidden="true"></i>
+      <h1 class="hata-başlık" id="hata-başlık">{tr.hata404.başlık}</h1>
+      <p class="hata-açıklama" id="hata-açıklama">{tr.hata404.açıklama}</p>
+      <a href="/tr/" class="hata-buton" id="hata-buton">
+        <i class="ti ti-home" aria-hidden="true"></i>
+        <span id="hata-buton-metin">{tr.hata404.anaSayfaButon}</span>
+      </a>
+    </div>
+  </body>
+</html>
+
+<script>
+  const kayıtlıTema = localStorage.getItem("tema") ?? "otomatik";
+  const temaUygula = (seçim: string) => {
+    const koyu =
+      seçim === "koyu" ||
+      (seçim === "otomatik" &&
+        window.matchMedia("(prefers-color-scheme: dark)").matches);
+    document.documentElement.setAttribute("data-tema", koyu ? "koyu" : "açık");
+  };
+  temaUygula(kayıtlıTema);
+
+  const sayfaVeri = document.querySelector<HTMLElement>(".hata-sayfa");
+
+  function dilUygula(dil: "tr" | "en") {
+    document.documentElement.lang = dil;
+    localStorage.setItem("dil", dil);
+
+    const başlık = document.getElementById("hata-başlık");
+    const açıklama = document.getElementById("hata-açıklama");
+    const butonMetin = document.getElementById("hata-buton-metin");
+    const buton = document.getElementById("hata-buton") as HTMLAnchorElement;
+    if (başlık) başlık.textContent = sayfaVeri?.dataset[`${dil}Baslik`] ?? "";
+    if (açıklama)
+      açıklama.textContent = sayfaVeri?.dataset[`${dil}Aciklama`] ?? "";
+    if (butonMetin)
+      butonMetin.textContent = sayfaVeri?.dataset[`${dil}Buton`] ?? "";
+    if (buton) buton.href = dil === "tr" ? "/tr/" : "/en/";
+  }
+
+  const kaydedilmiş = localStorage.getItem("dil") as "tr" | "en" | null;
+  const tarayıcıDili: "tr" | "en" = navigator.language?.startsWith("tr")
+    ? "tr"
+    : "en";
+  dilUygula(kaydedilmiş ?? tarayıcıDili);
+</script>

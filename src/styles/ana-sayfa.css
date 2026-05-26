@@ -1,0 +1,126 @@
+/* #region Karşılama */
+
+.karşılama {
+  padding: 5rem 0 4rem;
+}
+
+.karşılama-başlık {
+  font-family: var(--font-başlık);
+  font-size: 3rem;
+  font-weight: 500;
+  color: var(--renk-metin);
+  line-height: 1.2;
+  margin-bottom: 1.25rem;
+}
+
+.karşılama-başlık span {
+  color: var(--renk-vurgu);
+}
+
+.karşılama-alt-başlık {
+  font-size: 1.1rem;
+  color: var(--renk-metin-ikincil);
+  margin-bottom: 2rem;
+}
+
+.karşılama-buton {
+  display: inline-block;
+  font-family: var(--font-başlık);
+  font-size: 0.95rem;
+  padding: 0.65rem 1.5rem;
+  border: 1px solid var(--renk-vurgu);
+  color: var(--renk-vurgu);
+  border-radius: var(--yarıçap);
+  transition:
+    background-color var(--geçiş),
+    color var(--geçiş);
+}
+
+.karşılama-buton:hover {
+  background-color: var(--renk-vurgu);
+  color: var(--renk-arkaplan);
+}
+
+@media (max-width: 768px) {
+  .karşılama-başlık {
+    font-size: 2rem;
+  }
+}
+
+/* #endregion */
+/* #region Bölümler */
+
+.ana-bölüm {
+  margin-top: 5rem;
+}
+
+.bölüm-başlık {
+  font-size: 1.5rem;
+  font-weight: 500;
+  color: var(--renk-metin);
+  margin-bottom: 1.5rem;
+  padding-bottom: 0.75rem;
+  border-bottom: 1px solid var(--renk-kenar);
+}
+
+.hakkımda-içerik {
+  max-width: 680px;
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+}
+
+.hakkımda-içerik p {
+  font-size: 1rem;
+  line-height: 1.8;
+  color: var(--renk-metin-ikincil);
+  margin-bottom: 0;
+}
+
+.one-cikan-projeler-izgara {
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.tüm-projeler-link {
+  margin-top: 1.25rem;
+}
+
+.tüm-projeler-link a {
+  font-family: var(--font-başlık);
+  font-size: 0.9rem;
+  color: var(--renk-metin-ikincil);
+  transition: color var(--geçiş);
+}
+
+.tüm-projeler-link a:hover {
+  color: var(--renk-vurgu);
+}
+
+.iletisime-gec-bolumu {
+  padding: 3rem 2rem;
+  background: var(--renk-yüzey);
+  border: 0.5px solid var(--renk-kenar);
+  border-radius: var(--yarıçap);
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 1rem;
+  margin-bottom: 2rem;
+  max-width: 480px;
+}
+
+.iletisime-gec-bolumu p {
+  margin-bottom: 0;
+}
+
+@media (max-width: 768px) {
+  .one-cikan-projeler-izgara {
+    grid-template-columns: 1fr;
+  }
+
+  .iletisime-gec-bolumu {
+    padding: 2rem 1.25rem;
+  }
+}
+
+/* #endregion */

@@ -1,0 +1,47 @@
+{
+  "tr": {
+    "ad": "SteadyStudy",
+    "açıklama": "Giyilebilir sağlık ve ders çalışma destek cihazı. Jüri özel ödülü aldı."
+  },
+  "en": {
+    "ad": "SteadyStudy",
+    "açıklama": "A wearable health and study support device. Received a jury special award."
+  },
+
+  "kategori": "cihaz",
+  "durum": "prototip",
+
+  "ikon": "ti-cpu",
+  "görseller": [
+    {
+      "yol": "/assets/images/steadystudy-kapak.webp",
+      "kapak": true,
+      "detaydaGöster": false
+    },
+    {
+      "yol": "/assets/images/steadystudy-sunum.webp",
+      "kapak": false,
+      "detaydaGöster": true
+    },
+    {
+      "yol": "/assets/images/steadystudy-simülasyon-devresi.webp",
+      "kapak": false,
+      "detaydaGöster": true
+    },
+    {
+      "yol": "/assets/images/steadystudy-ödül.webp",
+      "kapak": false,
+      "detaydaGöster": true
+    }
+  ],
+
+  "bağlıBaşarılar": ["steadystudyödülü"],
+
+  "detaylıAçıklama": {
+    "tr": "SteadyStudy, ortaokul ve lise öğrencilerinin ders çalışma süreçlerinde karşılaştığı stres, odak kaybı ve motivasyon düşüklüğü sorunlarına proaktif ve biyometrik veri odaklı bir çözüm sunmak amacıyla tasarlanmış giyilebilir bir ekosistemdir.\n\nSistem üç katmandan oluşur: ESP32 tabanlı bileklik HRV ve GSR sensörleri aracılığıyla kullanıcının stres seviyesini arka planda sürekli izler; kişiselleştirilmiş eşik aşıldığında haptic geri bildirim tetiklenir ve sistem otomatik olarak devreye girer; mobil uygulama nefes egzersizi, lofi müzik veya mikro-görev gibi müdahale seçenekleri sunar.\n\nMevcut uygulamalardan temel farkı şudur: rakip çözümler kullanıcının harekete geçmesini beklerken SteadyStudy stres eşiği aşıldığında kendisi devreye girer. Sistem ayrıca XP kazanma, streak serisi ve maskot gelişimi gibi oyunsal katmanlar içererek uzun vadeli kullanım alışkanlığı oluşturmayı hedefler.\n\niOS, Android ve masaüstü platformlarını destekleyen uygulama; ebeveyn arayüzü, kurumsal lisans ve donanımsız lite mod seçenekleri sunar. Proje, Boardoza Sense-Tech Challenge yarışmasında 3 kişilik ekiple sunulmuş ve jüri özel ödülüne layık görülmüştür.",
+
+    "en": "SteadyStudy is a wearable ecosystem designed to proactively address stress, loss of focus, and motivation challenges that middle and high school students face during study sessions through biometric data.\n\nThe system consists of three layers: an ESP32-based wristband continuously monitors the user's stress level in the background via HRV and GSR sensors; when a personalized threshold is exceeded, haptic feedback is triggered and the system automatically intervenes; the mobile app offers intervention options such as breathing exercises, lofi music, or micro-tasks.\n\nIts key distinction from existing solutions is that while competitors wait for the user to take action, SteadyStudy intervenes automatically when the stress threshold is crossed. The system also includes gamification layers such as XP rewards, streak series, and mascot progression to build long-term usage habits.\n\nThe app supports iOS, Android, and desktop platforms, and offers a parent interface, corporate licensing, and a hardware-free lite mode. The project was presented by a 3-person team at the Boardoza Sense-Tech Challenge and received the jury special award."
+  },
+
+  "sıra": 2
+}

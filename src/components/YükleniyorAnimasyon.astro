@@ -1,0 +1,62 @@
+<div id="yükleniyor-bar-kap">
+  <div id="yükleniyor-bar"></div>
+</div>
+
+<style>
+  #yükleniyor-bar-kap {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 2px;
+    z-index: 9999;
+    background: transparent;
+  }
+
+  #yükleniyor-bar {
+    height: 100%;
+    width: 0%;
+    background: var(--renk-vurgu);
+    transition:
+      width 0.2s ease,
+      opacity 0.3s ease;
+    box-shadow: 0 0 8px var(--renk-vurgu);
+  }
+
+  #yükleniyor-bar.tamamlandı {
+    opacity: 0;
+  }
+</style>
+
+<script>
+  const bar = document.getElementById("yükleniyor-bar");
+
+  function ilerlemeSimüle() {
+    let ilerleme = 0;
+    const aralık = setInterval(() => {
+      if (ilerleme < 85) {
+        ilerleme += Math.random() * 8;
+        if (bar) bar.style.width = `${Math.min(ilerleme, 85)}%`;
+      } else {
+        clearInterval(aralık);
+      }
+    }, 150);
+    return aralık;
+  }
+
+  function tamamla(aralık: ReturnType<typeof setInterval>) {
+    clearInterval(aralık);
+    if (bar) {
+      bar.style.width = "100%";
+      setTimeout(() => bar.classList.add("tamamlandı"), 200);
+    }
+  }
+
+  const aralık = ilerlemeSimüle();
+
+  if (document.readyState === "complete") {
+    tamamla(aralık);
+  } else {
+    window.addEventListener("load", () => tamamla(aralık), { once: true });
+  }
+</script>

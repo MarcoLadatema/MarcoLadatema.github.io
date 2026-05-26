@@ -1,0 +1,14 @@
+{
+  "tr": {
+    "ad": "Developer Tools",
+    "açıklama": "Unity geliştiricileri için bir düzine editör aracı sunan eklenti paketi."
+  },
+  "en": {
+    "ad": "Developer Tools",
+    "açıklama": "A plugin package offering a dozen editor tools for Unity developers."
+  },
+  "kategori": "eklenti",
+  "durum": "gelistiriliyor",
+  "ikon": "ti-tool",
+  "sıra": 3
+}

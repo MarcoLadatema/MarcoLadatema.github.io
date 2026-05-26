@@ -1,0 +1,163 @@
+---
+import TemelDüzen from "../../layouts/TemelDüzen.astro";
+import "../../styles/iletişim.css";
+import { getCollection } from "astro:content";
+import { çeviriAl, dilAl, type Dil } from "../../i18n/utils";
+
+export function getStaticPaths() {
+  return [{ params: { lang: "tr" } }, { params: { lang: "en" } }];
+}
+
+const dil = dilAl(Astro.url) as Dil;
+const t = çeviriAl(dil);
+
+const projeler = await getCollection("projeler");
+const başarılar = await getCollection("başarılar");
+const blogYazıları = await getCollection("blog");
+
+const dilProjeler = projeler;
+const dilBaşarılar = başarılar;
+const dilBlog = blogYazıları.filter((y) => y.data.dil === dil);
+
+const bağlamSeçenekleri = [
+  ...dilProjeler.map((p) => ({
+    grup: t.iletişim.projeler,
+    değer: `proje:${p.id}`,
+    etiket: p.data[dil].ad,
+  })),
+  ...dilBaşarılar.map((b) => ({
+    grup: t.iletişim.başarılar,
+    değer: `başarı:${b.id}`,
+    etiket: b.data[dil].ad,
+  })),
+  ...dilBlog.map((b) => ({
+    grup: t.iletişim.blog,
+    değer: `blog:${b.id}`,
+    etiket: b.data.başlık,
+  })),
+];
+
+const gruplar = [t.iletişim.projeler, t.iletişim.başarılar, t.iletişim.blog];
+---
+
+<TemelDüzen
+  başlık={t.iletişim.başlık}
+  dil={dil}
+  açıklama={t.ogAçıklamalar.iletişim}
+>
+  <h1>{t.iletişim.başlık}</h1>
+
+  <div class="iletisim-duzen">
+    <div class="iletisim-sol">
+      <div class="iletisim-sol-baslik">{t.iletişim.merhabaMetin}</div>
+      <p>{t.iletişim.açıklamaMetin}</p>
+      <div class="iletisim-not">
+        <i class="ti ti-lock" aria-hidden="true"></i>
+        <span>{t.iletişim.gizlilikNotu}</span>
+      </div>
+    </div>
+
+    <form
+      class="iletisim-form"
+      action="https://formspree.io/f/mqejlbwe"
+      method="POST"
+    >
+      <div class="form-iki-sutun">
+        <div class="form-alan">
+          <label class="form-etiket" for="ad">{t.iletişim.ad}</label>
+          <input class="form-girdi" type="text" id="ad" name="ad" required />
+        </div>
+        <div class="form-alan">
+          <label class="form-etiket" for="soyad">{t.iletişim.soyad}</label>
+          <input
+            class="form-girdi"
+            type="text"
+            id="soyad"
+            name="soyad"
+            required
+          />
+        </div>
+      </div>
+
+      <div class="form-alan">
+        <label class="form-etiket" for="eposta">{t.iletişim.eposta}</label>
+        <input
+          class="form-girdi"
+          type="email"
+          id="eposta"
+          name="email"
+          required
+        />
+      </div>
+
+      <div class="form-alan">
+        <label class="form-etiket" for="konu">{t.iletişim.konu}</label>
+        <input class="form-girdi" type="text" id="konu" name="konu" required />
+      </div>
+
+      <div class="form-alan">
+        <label class="form-etiket" for="baglam">
+          {t.iletişim.bağlam}
+          <span class="form-opsiyonel">{t.iletişim.bağlamOpsiyonel}</span>
+        </label>
+        <select class="form-girdi form-secim" id="baglam" name="bağlam">
+          <option value="">{t.iletişim.seçiniz}</option>
+          {
+            gruplar.map((grup) => (
+              <optgroup label={grup}>
+                {bağlamSeçenekleri
+                  .filter((s) => s.grup === grup)
+                  .map((seçenek) => (
+                    <option value={seçenek.değer}>{seçenek.etiket}</option>
+                  ))}
+              </optgroup>
+            ))
+          }
+        </select>
+      </div>
+
+      <div class="form-alan">
+        <label class="form-etiket" for="mesaj">{t.iletişim.mesaj}</label>
+        <textarea
+          class="form-girdi form-metin-alani"
+          id="mesaj"
+          name="mesaj"
+          required></textarea>
+      </div>
+
+      <button class="form-gonder-butonu" type="submit">
+        {t.iletişim.gönder}
+        <i class="ti ti-arrow-right" aria-hidden="true"></i>
+      </button>
+    </form>
+
+    <div id="basari-mesaji" class="form-basari-mesaji" style="display:none;">
+      <i class="ti ti-circle-check" aria-hidden="true"></i>
+      <span>{t.iletişim.başarıMesajı}</span>
+    </div>
+  </div>
+
+  <script>
+    const form = document.querySelector(".iletisim-form") as HTMLFormElement;
+    const başarıMesajı = document.getElementById(
+      "basari-mesaji",
+    ) as HTMLElement;
+
+    form.addEventListener("submit", async (e) => {
+      e.preventDefault();
+
+      const veriler = new FormData(form);
+      const yanıt = await fetch(form.action, {
+        method: "POST",
+        body: veriler,
+        headers: { Accept: "application/json" },
+      });
+
+      if (yanıt.ok) {
+        form.reset();
+        form.style.display = "none";
+        başarıMesajı.style.display = "flex";
+      }
+    });
+  </script>
+</TemelDüzen>

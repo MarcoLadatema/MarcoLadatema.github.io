@@ -1,0 +1,113 @@
+{
+  "gezinti": {
+    "anaSayfa": "Home",
+    "projeler": "Projects",
+    "başarılar": "Achievements",
+    "blog": "Blog",
+    "sosyalMedya": "Social Media",
+    "iletişim": "Contact"
+  },
+
+  "ayarlar": {
+    "başlık": "Settings",
+    "tema": "Theme",
+    "açık": "Light",
+    "otomatik": "Auto",
+    "koyu": "Dark",
+    "dil": "Language"
+  },
+
+  "anaSayfa": {
+    "slogan1": "Turning dreams into systems,",
+    "slogan2": "systems into",
+    "sloganVurgu": "game",
+    "slogan3": ".",
+    "altBaşlık": "Developer. Builder. Gamer.",
+    "hakkımda": "About",
+    "hakkımdaMetin1": "I've always had games, systems, and ideas in my mind. While trying to mod games in middle and high school, I realized something: creating is more enjoyable than playing.",
+    "hakkımdaMetin2": "In 2023, I started game development with Unity. Over time, I grew eager to expand beyond games into apps, developer tools, and tech devices.",
+    "hakkımdaMetin3": "My current focus is publishing games under my own brand, building useful apps and game development plugins, and creating fun devices.",
+    "öneCıkanProjeler": "Featured Projects",
+    "tümProjeleriGör": "View all projects →",
+    "iletişimeGeç": "Get in Touch",
+    "iletişimMetin": "Ideas take shape when discussed.",
+    "iletişimButon": "Get in Touch →"
+  },
+
+  "projeler": {
+    "başlık": "Projects",
+    "projelereGit": "← Back to Projects"
+  },
+
+  "başarılar": {
+    "başlık": "Achievements"
+  },
+
+  "blog": {
+    "başlık": "Blog",
+    "blogaDön": "← Back to Blog"
+  },
+
+  "sosyalMedya": {
+    "başlık": "Social Media"
+  },
+
+  "henüzHazırDeğil": {
+    "başlık": "Not Ready Yet",
+    "açıklama": "This content isn't ready yet. It'll be here soon!",
+    "kapat": "Close"
+  },
+
+  "iletişim": {
+    "başlık": "Contact",
+    "merhabaMetin": "Hello.",
+    "açıklamaMetin": "Have an idea, suggestion, or question? Use this form to reach me directly. I'll get back to you as soon as possible.",
+    "gizlilikNotu": "Your message is only delivered to me.",
+    "ad": "First Name",
+    "soyad": "Last Name",
+    "eposta": "Email",
+    "konu": "Subject",
+    "bağlam": "Context",
+    "bağlamOpsiyonel": "(optional)",
+    "seçiniz": "— Select —",
+    "mesaj": "Message",
+    "gönder": "Send",
+    "başarıMesajı": "Your message has been sent. I'll get back to you soon.",
+    "projeler": "Projects",
+    "başarılar": "Achievements",
+    "blog": "Blog"
+  },
+
+  "altBilgi": {
+    "haklar": "All rights reserved."
+  },
+
+  "hata404": {
+    "başlık": "Page Not Found",
+    "açıklama": "The page you're looking for doesn't exist or may have been moved.",
+    "anaSayfaButon": "Back to Home"
+  },
+
+  "durumlar": {
+    "gelistiriliyor": "In Development",
+    "tamamlandi": "Completed",
+    "rafaKaldirildi": "Shelved",
+    "prototip": "Prototype"
+  },
+
+  "ogAçıklamalar": {
+    "anaSayfa": "Developer, builder, and gamer. Making games, apps, plugins, and devices.",
+    "projeler": "Games, apps, plugins, and devices developed by Marco La'datema.",
+    "başarılar": "Awards and milestones achieved by Marco La'datema.",
+    "blog": "Developer notes, ideas, and experiences.",
+    "sosyalMedya": "Social media platforms where Marco La'datema is present.",
+    "iletişim": "Reach out directly with ideas, suggestions, or questions."
+  },
+
+  "kategoriler": {
+    "oyun": "Game",
+    "uygulama": "App",
+    "eklenti": "Plugin",
+    "cihaz": "Device"
+  }
+}

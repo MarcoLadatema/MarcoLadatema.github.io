@@ -1,0 +1,148 @@
+---
+import TemelDüzen from "../../layouts/TemelDüzen.astro";
+import "../../styles/sosyal-medya.css";
+import { getCollection } from "astro:content";
+import { çeviriAl, dilAl, type Dil } from "../../i18n/utils";
+
+export function getStaticPaths() {
+  return [{ params: { lang: "tr" } }, { params: { lang: "en" } }];
+}
+
+const dil = dilAl(Astro.url) as Dil;
+const t = çeviriAl(dil);
+
+const platformlar = await getCollection("sosyalMedya");
+const sıralıPlatformlar = platformlar.sort((a, b) => a.data.sıra - b.data.sıra);
+---
+
+<TemelDüzen
+  başlık={t.sosyalMedya.başlık}
+  dil={dil}
+  açıklama={t.ogAçıklamalar.sosyalMedya}
+>
+  <h1>{t.sosyalMedya.başlık}</h1>
+
+  <div class="sosyal-medya-sayfa">
+    <a
+      id="one-cikan-kart"
+      href={sıralıPlatformlar[0].data.hazır === false
+        ? "#"
+        : sıralıPlatformlar[0].data.url}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="one-cikan-platform"
+      data-hazır={sıralıPlatformlar[0].data.hazır === false ? "false" : "true"}
+    >
+      <div
+        class="one-cikan-ikon"
+        id="one-cikan-ikon-kap"
+        style={`background: ${sıralıPlatformlar[0].data.renk}18; border-color: ${sıralıPlatformlar[0].data.renk}44;`}
+      >
+        <i
+          id="one-cikan-ikon"
+          class={`ti ${sıralıPlatformlar[0].data.ikon}`}
+          aria-hidden="true"
+          style={`color: ${sıralıPlatformlar[0].data.renk};`}></i>
+      </div>
+      <div class="one-cikan-bilgi">
+        <div class="one-cikan-platform-adi" id="one-cikan-ad">
+          {sıralıPlatformlar[0].data.platform}
+        </div>
+        <div class="one-cikan-kullanici-adi" id="one-cikan-kullanici">
+          {sıralıPlatformlar[0].data.kullanıcıAdı}
+        </div>
+        {
+          sıralıPlatformlar[0].data.açıklama && (
+            <div class="one-cikan-aciklama" id="one-cikan-aciklama">
+              {sıralıPlatformlar[0].data.açıklama}
+            </div>
+          )
+        }
+      </div>
+      <i class="ti ti-external-link one-cikan-link-ikonu" aria-hidden="true"
+      ></i>
+    </a>
+
+    <div class="platform-izgara">
+      {
+        sıralıPlatformlar.map((platform) => (
+          <button
+            class="mini-platform-kart"
+            data-platform={platform.data.platform}
+            data-kullanici={platform.data.kullanıcıAdı}
+            data-url={platform.data.url}
+            data-ikon={platform.data.ikon}
+            data-aciklama={platform.data.açıklama ?? ""}
+            data-renk={platform.data.renk ?? "#7ec8e3"}
+            data-hazır={platform.data.hazır === false ? "false" : "true"}
+          >
+            <i
+              class={`ti ${platform.data.ikon}`}
+              aria-hidden="true"
+              style={`color: ${platform.data.renk};`}
+            />
+            <div class="mini-platform-adi">{platform.data.platform}</div>
+          </button>
+        ))
+      }
+    </div>
+  </div>
+
+  <script>
+    const kartlar = document.querySelectorAll<HTMLButtonElement>(
+      ".mini-platform-kart",
+    );
+    const oneCikanKart = document.getElementById(
+      "one-cikan-kart",
+    ) as HTMLAnchorElement;
+    const oneCikanIkon = document.getElementById(
+      "one-cikan-ikon",
+    ) as HTMLElement;
+    const oneCikanAd = document.getElementById("one-cikan-ad") as HTMLElement;
+    const oneCikanKullanici = document.getElementById(
+      "one-cikan-kullanici",
+    ) as HTMLElement;
+    const oneCikanAciklama = document.getElementById(
+      "one-cikan-aciklama",
+    ) as HTMLElement;
+
+    kartlar[0]?.classList.add("aktif");
+
+    kartlar.forEach((kart) => {
+      kart.addEventListener("click", () => {
+        kartlar.forEach((k) => k.classList.remove("aktif"));
+        kart.classList.add("aktif");
+
+        const platform = kart.dataset.platform ?? "";
+        const kullanici = kart.dataset.kullanici ?? "";
+        const url = kart.dataset.url ?? "";
+        const ikon = kart.dataset.ikon ?? "";
+        const aciklama = kart.dataset.aciklama ?? "";
+        const renk = kart.dataset.renk ?? "#7ec8e3";
+        const hazır = kart.dataset.hazır !== "false";
+        const ikonKap = document.getElementById(
+          "one-cikan-ikon-kap",
+        ) as HTMLElement;
+
+        oneCikanKart.href = hazır ? url : "#";
+        oneCikanKart.dataset.hazır = hazır ? "true" : "false";
+        oneCikanIkon.className = `ti ${ikon}`;
+        oneCikanIkon.style.color = renk;
+        ikonKap.style.background = `${renk}18`;
+        ikonKap.style.borderColor = `${renk}44`;
+        oneCikanAd.textContent = platform;
+        oneCikanKullanici.textContent = kullanici;
+        if (oneCikanAciklama) {
+          oneCikanAciklama.textContent = aciklama;
+        }
+      });
+    });
+
+    oneCikanKart.addEventListener("click", (olay) => {
+      if (oneCikanKart.dataset.hazır === "false") {
+        olay.preventDefault();
+        (window as any).henüzHazırGöster();
+      }
+    });
+  </script>
+</TemelDüzen>

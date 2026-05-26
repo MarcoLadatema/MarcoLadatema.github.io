@@ -1,0 +1,16 @@
+---
+import type { Dil } from "../i18n/utils";
+import type { çeviriAl } from "../i18n/utils";
+
+interface Props {
+  dil: Dil;
+  t: ReturnType<typeof çeviriAl>;
+}
+
+const { t } = Astro.props;
+const yıl = new Date().getFullYear();
+---
+
+<footer>
+  <p>© {yıl} Marco La'datema. {t.altBilgi.haklar}</p>
+</footer>

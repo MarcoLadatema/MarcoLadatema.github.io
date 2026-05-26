@@ -1,0 +1,134 @@
+---
+import { çeviriAl, type Dil } from "../i18n/utils";
+
+interface Props {
+  dil: Dil;
+}
+
+const { dil } = Astro.props;
+const t = çeviriAl(dil);
+---
+
+<div
+  id="henuz-hazır-popup-kaplama"
+  class="popup-kaplama gizli"
+  data-baslik={t.henüzHazırDeğil.başlık}
+  data-aciklama={t.henüzHazırDeğil.açıklama}
+  data-kapat={t.henüzHazırDeğil.kapat}
+>
+  <div class="popup-kutu">
+    <div class="popup-ikon-alani">
+      <i class="ti ti-clock-pause" aria-hidden="true"></i>
+    </div>
+    <h2 class="popup-baslik">{t.henüzHazırDeğil.başlık}</h2>
+    <p class="popup-aciklama">{t.henüzHazırDeğil.açıklama}</p>
+    <button id="henuz-hazır-kapat" class="popup-kapat-buton">
+      {t.henüzHazırDeğil.kapat}
+    </button>
+  </div>
+</div>
+
+<style>
+  .popup-kaplama {
+    position: fixed;
+    inset: 0;
+    background: rgba(0, 0, 0, 0.6);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1000;
+    backdrop-filter: blur(4px);
+    transition: opacity var(--geçiş);
+  }
+
+  .popup-kaplama.gizli {
+    display: none;
+  }
+
+  .popup-kutu {
+    background: var(--renk-yüzey);
+    border: 1px solid var(--renk-kenar);
+    border-radius: var(--yarıçap);
+    padding: 2rem;
+    max-width: 380px;
+    width: 90%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1rem;
+    text-align: center;
+  }
+
+  .popup-ikon-alani {
+    width: 56px;
+    height: 56px;
+    border-radius: var(--yarıçap);
+    background: rgba(126, 200, 227, 0.1);
+    border: 1px solid rgba(126, 200, 227, 0.3);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .popup-ikon-alani i {
+    font-size: 1.75rem;
+    color: var(--renk-vurgu);
+  }
+
+  .popup-baslik {
+    font-family: var(--font-başlık);
+    font-size: 1.2rem;
+    font-weight: 600;
+    color: var(--renk-metin);
+    margin: 0;
+  }
+
+  .popup-aciklama {
+    font-size: 0.9rem;
+    color: var(--renk-metin-ikincil);
+    margin: 0;
+    line-height: 1.6;
+  }
+
+  .popup-kapat-buton {
+    margin-top: 0.5rem;
+    padding: 0.6rem 1.5rem;
+    background: var(--renk-vurgu);
+    color: var(--renk-arkaplan);
+    border: none;
+    border-radius: var(--yarıçap);
+    font-family: var(--font-başlık);
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: background var(--geçiş);
+  }
+
+  .popup-kapat-buton:hover {
+    background: var(--renk-vurgu-koyu);
+  }
+</style>
+
+<script>
+  const kaplama = document.getElementById("henuz-hazır-popup-kaplama");
+  const kapatButon = document.getElementById("henuz-hazır-kapat");
+
+  function henüzHazırGöster() {
+    if (kaplama) kaplama.classList.remove("gizli");
+  }
+
+  function henüzHazırGizle() {
+    if (kaplama) kaplama.classList.add("gizli");
+  }
+
+  kapatButon?.addEventListener("click", henüzHazırGizle);
+
+  kaplama?.addEventListener("click", (olay) => {
+    if (olay.target === kaplama) henüzHazırGizle();
+  });
+
+  document.addEventListener("keydown", (olay) => {
+    if (olay.key === "Escape") henüzHazırGizle();
+  });
+
+  (window as any).henüzHazırGöster = henüzHazırGöster;
+</script>

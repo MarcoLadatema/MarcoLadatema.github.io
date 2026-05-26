@@ -1,0 +1,102 @@
+---
+import TemelDüzen from "../../layouts/TemelDüzen.astro";
+import { getCollection } from "astro:content";
+import { çeviriAl, dilAl, type Dil } from "../../i18n/utils";
+import "../../styles/ana-sayfa.css";
+import "../../styles/projeler.css";
+
+export function getStaticPaths() {
+  return [{ params: { lang: "tr" } }, { params: { lang: "en" } }];
+}
+
+const dil = dilAl(Astro.url) as Dil;
+const t = çeviriAl(dil);
+
+const tümProjeler = await getCollection("projeler");
+const öneCıkanProjeler = tümProjeler
+  .filter((p) => p.id === "steadystudy" || p.id === "derstakip")
+  .sort((a, b) => {
+    const sıraA = a.data.sıra ?? Infinity;
+    const sıraB = b.data.sıra ?? Infinity;
+    if (sıraA !== sıraB) return sıraA - sıraB;
+    return a.data.tr.ad.localeCompare(b.data.tr.ad, "tr");
+  });
+---
+
+<TemelDüzen
+  başlık={t.gezinti.anaSayfa}
+  dil={dil}
+  açıklama={t.ogAçıklamalar.anaSayfa}
+>
+  <section class="karşılama">
+    <h1 class="karşılama-başlık">
+      {t.anaSayfa.slogan1}<br />
+      {t.anaSayfa.slogan2}
+      <span>{t.anaSayfa.sloganVurgu}</span>
+      {t.anaSayfa.slogan3}
+    </h1>
+    <p class="karşılama-alt-başlık">{t.anaSayfa.altBaşlık}</p>
+  </section>
+
+  <section class="ana-bölüm">
+    <h2 class="bölüm-başlık">{t.anaSayfa.hakkımda}</h2>
+    <div class="hakkımda-içerik">
+      <p>{t.anaSayfa.hakkımdaMetin1}</p>
+      <p>{t.anaSayfa.hakkımdaMetin2}</p>
+      <p>{t.anaSayfa.hakkımdaMetin3}</p>
+    </div>
+  </section>
+
+  <section class="ana-bölüm">
+    <h2 class="bölüm-başlık">{t.anaSayfa.öneCıkanProjeler}</h2>
+    <div class="projeler-izgara one-cikan-projeler-izgara">
+      {
+        öneCıkanProjeler.map((proje) => (
+          <a href={`/${dil}/projects/${proje.id}`} class="proje-karti">
+            <div class="proje-karti-görsel">
+              {proje.data.görseller?.find((g) => g.kapak) ? (
+                <img
+                  src={proje.data.görseller.find((g) => g.kapak)!.yol}
+                  alt={proje.data[dil].ad}
+                />
+              ) : (
+                <div class="yer-tutucu-ikon">
+                  <i class={`ti ${proje.data.ikon}`} />
+                </div>
+              )}
+            </div>
+            <div class="proje-karti-gövde">
+              <div class="proje-karti-başlık">{proje.data[dil].ad}</div>
+              <div class="proje-karti-açıklama">{proje.data[dil].açıklama}</div>
+              <div class="proje-karti-etiketler">
+                <span class={`etiket etiket-${proje.data.kategori}`}>
+                  {t.kategoriler[proje.data.kategori]}
+                </span>
+                <span class={`etiket etiket-${proje.data.durum}`}>
+                  {
+                    t.durumlar[
+                      proje.data.durum === "rafa-kaldirildi"
+                        ? "rafaKaldirildi"
+                        : proje.data.durum
+                    ]
+                  }
+                </span>
+              </div>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+    <div class="tüm-projeler-link">
+      <a href={`/${dil}/projeler`}>{t.anaSayfa.tümProjeleriGör}</a>
+    </div>
+  </section>
+
+  <section class="ana-bölüm iletisime-gec-bolumu">
+    <h2 class="bölüm-başlık">{t.anaSayfa.iletişimeGeç}</h2>
+    <p>{t.anaSayfa.iletişimMetin}</p>
+    <a href={`/${dil}/iletişim`} class="karşılama-buton"
+      >{t.anaSayfa.iletişimButon}</a
+    >
+  </section>
+</TemelDüzen>

@@ -1,0 +1,239 @@
+---
+import type { Dil } from "../i18n/utils";
+import type { çeviriAl } from "../i18n/utils";
+import { getCollection } from "astro:content";
+
+interface Props {
+  dil: Dil;
+  t: ReturnType<typeof çeviriAl>;
+}
+
+const { dil, t } = Astro.props;
+const sayfaYolu = decodeURIComponent(Astro.url.pathname);
+
+const bağlantılar = [
+  { ad: t.gezinti.anaSayfa, yol: `/${dil}/` },
+  { ad: t.gezinti.projeler, yol: `/${dil}/projeler` },
+  { ad: t.gezinti.başarılar, yol: `/${dil}/başarılar` },
+  { ad: t.gezinti.blog, yol: `/${dil}/blog` },
+  { ad: t.gezinti.sosyalMedya, yol: `/${dil}/sosyal-medya` },
+  { ad: t.gezinti.iletişim, yol: `/${dil}/iletişim` },
+];
+
+const diğerDil = dil === "tr" ? "en" : "tr";
+const diğerDilEtiket = dil === "tr" ? "EN" : "TR";
+
+const blogDetayEşleşmesi = sayfaYolu.match(new RegExp(`^/${dil}/blog/(.+)$`));
+let mevcutYol: string;
+
+if (blogDetayEşleşmesi) {
+  const mevcutKimlik = blogDetayEşleşmesi[1];
+  const tümYazılar = await getCollection("blog");
+  const eşYazı = tümYazılar.find(
+    (y) =>
+      y.data.dil === diğerDil &&
+      y.id.replace(`.${diğerDil}.md`, "") === mevcutKimlik,
+  );
+  if (eşYazı) {
+    const diğerKimlik = eşYazı.id.replace(`.${diğerDil}.md`, "");
+    mevcutYol = `/${diğerDil}/blog/${diğerKimlik}`;
+  } else {
+    mevcutYol = `/${diğerDil}/blog`;
+  }
+} else {
+  mevcutYol = sayfaYolu.replace(`/${dil}`, `/${diğerDil}`);
+}
+---
+
+<nav class="gezinti">
+  <a href={`/${dil}/`} class="gezinti-logo">
+    <img src="/assets/logo.png" alt="Marco La'datema Logo" />
+    <span>Marco La'datema</span>
+  </a>
+
+  <ul class="gezinti-menü">
+    {
+      bağlantılar.map((bağlantı) => (
+        <li>
+          <a
+            href={bağlantı.yol}
+            class={sayfaYolu === bağlantı.yol ? "aktif" : ""}
+          >
+            {bağlantı.ad}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+
+  <div class="gezinti-sağ">
+    <button class="hamburger" aria-label="Menüyü aç" aria-expanded="false">
+      <i class="ti ti-menu-2" aria-hidden="true"></i>
+    </button>
+    <button class="ayarlar-butonu" id="ayarlar-butonu" aria-label="Ayarlar">
+      <i class="ti ti-settings" aria-hidden="true"></i>
+    </button>
+  </div>
+</nav>
+
+<div class="ayarlar-paneli" id="ayarlar-paneli" aria-hidden="true">
+  <div class="ayarlar-bölüm">
+    <div class="ayarlar-etiket">{t.ayarlar.tema}</div>
+    <div class="tema-toggle" id="tema-toggle">
+      <button class="tema-seçenek" data-tema="açık" aria-label="Açık tema">
+        <i class="ti ti-sun" aria-hidden="true"></i>
+        <span>{t.ayarlar.açık}</span>
+      </button>
+      <button
+        class="tema-seçenek"
+        data-tema="otomatik"
+        aria-label="Otomatik tema"
+      >
+        <i class="ti ti-settings-automation" aria-hidden="true"></i>
+        <span>{t.ayarlar.otomatik}</span>
+      </button>
+      <button class="tema-seçenek" data-tema="koyu" aria-label="Koyu tema">
+        <i class="ti ti-moon" aria-hidden="true"></i>
+        <span>{t.ayarlar.koyu}</span>
+      </button>
+    </div>
+  </div>
+  <div class="ayarlar-ayraç"></div>
+  <div class="ayarlar-bölüm">
+    <div class="ayarlar-etiket">{t.ayarlar.dil}</div>
+    <div class="dil-toggle">
+      <a
+        href={dil === "en" ? mevcutYol : Astro.url.pathname}
+        class={`dil-seçenek${dil === "tr" ? " aktif" : ""}`}>TR</a
+      >
+      <a
+        href={dil === "tr" ? mevcutYol : Astro.url.pathname}
+        class={`dil-seçenek${dil === "en" ? " aktif" : ""}`}>EN</a
+      >
+    </div>
+  </div>
+</div>
+
+<div class="mobil-menü" aria-hidden="true">
+  <ul class="mobil-menü-liste">
+    {
+      bağlantılar.map((bağlantı) => (
+        <li>
+          <a
+            href={bağlantı.yol}
+            class={sayfaYolu === bağlantı.yol ? "aktif" : ""}
+          >
+            {bağlantı.ad}
+          </a>
+        </li>
+      ))
+    }
+  </ul>
+</div>
+
+<script>
+  const hamburger = document.querySelector(".hamburger") as HTMLButtonElement;
+  const mobilMenü = document.querySelector(".mobil-menü") as HTMLElement;
+
+  hamburger.addEventListener("click", () => {
+    const açık = mobilMenü.classList.toggle("açık");
+    hamburger.setAttribute("aria-expanded", açık.toString());
+    hamburger.querySelector("i")!.className = açık ? "ti ti-x" : "ti ti-menu-2";
+  });
+
+  document.querySelectorAll(".mobil-menü-liste a").forEach((link) => {
+    link.addEventListener("click", () => {
+      mobilMenü.classList.remove("açık");
+      hamburger.setAttribute("aria-expanded", "false");
+      hamburger.querySelector("i")!.className = "ti ti-menu-2";
+    });
+  });
+
+  const ayarlarButonu = document.getElementById(
+    "ayarlar-butonu",
+  ) as HTMLButtonElement;
+  const ayarlarPaneli = document.getElementById(
+    "ayarlar-paneli",
+  ) as HTMLElement;
+
+  ayarlarButonu.addEventListener("click", (e) => {
+    e.stopPropagation();
+    const açık = ayarlarPaneli.classList.toggle("açık");
+    ayarlarPaneli.setAttribute("aria-hidden", (!açık).toString());
+  });
+
+  document.addEventListener("click", (e) => {
+    if (
+      !ayarlarPaneli.contains(e.target as Node) &&
+      !ayarlarButonu.contains(e.target as Node)
+    ) {
+      ayarlarPaneli.classList.remove("açık");
+      ayarlarPaneli.setAttribute("aria-hidden", "true");
+    }
+  });
+
+  type TemaSeçimi = "açık" | "otomatik" | "koyu";
+
+  function sistemTemasıKoyu(): boolean {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches;
+  }
+
+  function temayıUygula(seçim: TemaSeçimi) {
+    const köklü = document.documentElement;
+    if (seçim === "koyu" || (seçim === "otomatik" && sistemTemasıKoyu())) {
+      köklü.setAttribute("data-tema", "koyu");
+    } else {
+      köklü.setAttribute("data-tema", "açık");
+    }
+  }
+
+  function aktifSeçeneğiGüncelle(seçim: TemaSeçimi) {
+    document.querySelectorAll(".tema-seçenek").forEach((btn) => {
+      btn.classList.toggle(
+        "aktif",
+        (btn as HTMLElement).dataset.tema === seçim,
+      );
+    });
+  }
+
+  const kayıtlıTema =
+    (localStorage.getItem("tema") as TemaSeçimi) ?? "otomatik";
+  temayıUygula(kayıtlıTema);
+  aktifSeçeneğiGüncelle(kayıtlıTema);
+
+  document.querySelectorAll(".tema-seçenek").forEach((btn) => {
+    btn.addEventListener("click", () => {
+      const seçim = (btn as HTMLElement).dataset.tema as TemaSeçimi;
+      localStorage.setItem("tema", seçim);
+      temayıUygula(seçim);
+      aktifSeçeneğiGüncelle(seçim);
+    });
+  });
+
+  window
+    .matchMedia("(prefers-color-scheme: dark)")
+    .addEventListener("change", () => {
+      const mevcutSeçim =
+        (localStorage.getItem("tema") as TemaSeçimi) ?? "otomatik";
+      if (mevcutSeçim === "otomatik") {
+        temayıUygula("otomatik");
+      }
+    });
+
+  // Ayarlar paneli sayfa geçişi sonrası
+  if (localStorage.getItem("ayarlar-paneli-açık") === "true") {
+    ayarlarPaneli.classList.add("açık");
+    ayarlarPaneli.setAttribute("aria-hidden", "false");
+    localStorage.removeItem("ayarlar-paneli-açık");
+  }
+
+  document.querySelectorAll(".dil-seçenek").forEach((link) => {
+    link.addEventListener("click", () => {
+      const seçilenDil = (link as HTMLAnchorElement).href.includes("/en/")
+        ? "en"
+        : "tr";
+      localStorage.setItem("dil", seçilenDil);
+      localStorage.setItem("ayarlar-paneli-açık", "true");
+    });
+  });
+</script>

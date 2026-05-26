@@ -1,0 +1,113 @@
+{
+  "gezinti": {
+    "anaSayfa": "Ana Sayfa",
+    "projeler": "Projeler",
+    "başarılar": "Başarılar",
+    "blog": "Blog",
+    "sosyalMedya": "Sosyal Medya",
+    "iletişim": "İletişim"
+  },
+
+  "ayarlar": {
+    "başlık": "Ayarlar",
+    "tema": "Tema",
+    "açık": "Açık",
+    "otomatik": "Otomatik",
+    "koyu": "Koyu",
+    "dil": "Dil"
+  },
+
+  "anaSayfa": {
+    "slogan1": "Hayallerimi sisteme,",
+    "slogan2": "sistemleri",
+    "sloganVurgu": "oyuna",
+    "slogan3": "dönüştürüyorum.",
+    "altBaşlık": "Geliştirici. Yapıcı. Oyuncu.",
+    "hakkımda": "Hakkımda",
+    "hakkımdaMetin1": "Çocukluğumdan beri zihnimde oyunlar, sistemler ve fikirler vardı. Orta okul ve lisede oyunlara modlar yapmaya çalışırken bir şeyi fark ettim: üretmek, oynamaktan daha keyifli.",
+    "hakkımdaMetin2": "2023'te Unity ile oyun geliştirmeye başladım. Zamanla sadece oyunlar değil, uygulamalar, geliştirici araçları ve teknolojik cihazlar da üretmeye hevesli hale geldim.",
+    "hakkımdaMetin3": "Şu an odağım kendi markam altında oyunlar yayınlamak, faydalı uygulamalar ve oyun geliştirme eklentileri oluşturmak, keyifli cihazlar üretmek.",
+    "öneCıkanProjeler": "Öne Çıkan Projeler",
+    "tümProjeleriGör": "Tüm projeleri gör →",
+    "iletişimeGeç": "İletişime Geç",
+    "iletişimMetin": "Fikirler konuşulunca şekillenir.",
+    "iletişimButon": "İletişime Geç →"
+  },
+
+  "projeler": {
+    "başlık": "Projeler",
+    "projelereGit": "← Projelere Dön"
+  },
+
+  "başarılar": {
+    "başlık": "Başarılar"
+  },
+
+  "blog": {
+    "başlık": "Blog",
+    "blogaDön": "← Blog'a Dön"
+  },
+
+  "sosyalMedya": {
+    "başlık": "Sosyal Medya"
+  },
+
+  "henüzHazırDeğil": {
+    "başlık": "Henüz Hazır Değil",
+    "açıklama": "Bu içerik henüz hazır değil. Yakında burada olacak!",
+    "kapat": "Kapat"
+  },
+
+  "iletişim": {
+    "başlık": "İletişim",
+    "merhabaMetin": "Merhaba.",
+    "açıklamaMetin": "Bir fikrin, önerin veya sorun mu var? Bu formu kullanarak doğrudan ulaşabilirsin. En kısa sürede geri döneceğim.",
+    "gizlilikNotu": "Mesajın yalnızca bana iletilir.",
+    "ad": "Ad",
+    "soyad": "Soyad",
+    "eposta": "E-posta",
+    "konu": "Konu",
+    "bağlam": "Bağlam",
+    "bağlamOpsiyonel": "(opsiyonel)",
+    "seçiniz": "— Seçiniz —",
+    "mesaj": "Mesaj",
+    "gönder": "Gönder",
+    "başarıMesajı": "Mesajın iletildi. En kısa sürede geri döneceğim.",
+    "projeler": "Projeler",
+    "başarılar": "Başarılar",
+    "blog": "Blog"
+  },
+
+  "altBilgi": {
+    "haklar": "Tüm hakları saklıdır."
+  },
+
+  "hata404": {
+    "başlık": "Sayfa Bulunamadı",
+    "açıklama": "Aradığın sayfa mevcut değil ya da taşınmış olabilir.",
+    "anaSayfaButon": "Ana Sayfaya Dön"
+  },
+
+  "durumlar": {
+    "gelistiriliyor": "Geliştiriliyor",
+    "tamamlandi": "Tamamlandı",
+    "rafaKaldirildi": "Rafa Kaldırıldı",
+    "prototip": "Prototip"
+  },
+
+  "ogAçıklamalar": {
+    "anaSayfa": "Geliştirici, yapıcı ve oyuncu. Oyunlar, uygulamalar, eklentiler ve cihazlar üretiyorum.",
+    "projeler": "Marco La'datema'nın geliştirdiği oyunlar, uygulamalar, eklentiler ve cihazlar.",
+    "başarılar": "Marco La'datema'nın aldığı ödüller ve ulaştığı kilometre taşları.",
+    "blog": "Geliştirici notları, fikirler ve deneyimler.",
+    "sosyalMedya": "Marco La'datema'nın bulunduğu sosyal medya platformları.",
+    "iletişim": "Fikir, öneri veya sorun için doğrudan ulaş."
+  },
+
+  "kategoriler": {
+    "oyun": "Oyun",
+    "uygulama": "Uygulama",
+    "eklenti": "Eklenti",
+    "cihaz": "Cihaz"
+  }
+}

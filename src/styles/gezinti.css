@@ -1,0 +1,307 @@
+/* #region Gezinti */
+
+.gezinti {
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background-color: rgba(20, 29, 38, 0.95);
+  backdrop-filter: blur(12px);
+  border-bottom: 1px solid var(--renk-kenar);
+  padding: 0 2rem;
+  height: 64px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.gezinti-logo {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  flex-shrink: 0;
+}
+
+.gezinti-logo img {
+  height: 40px;
+  width: auto;
+}
+
+.gezinti-logo span {
+  font-family: var(--font-başlık);
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: var(--renk-metin);
+  letter-spacing: 0.02em;
+}
+
+.gezinti-menü {
+  display: flex;
+  gap: 2rem;
+  list-style: none;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+.gezinti-menü a {
+  font-family: var(--font-başlık);
+  font-size: 0.95rem;
+  color: var(--renk-metin-ikincil);
+  transition: color var(--geçiş);
+  position: relative;
+  padding-bottom: 4px;
+}
+
+.gezinti-menü a::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 0;
+  height: 1px;
+  background-color: var(--renk-vurgu);
+  transition: width var(--geçiş);
+}
+
+.gezinti-menü a:hover {
+  color: var(--renk-metin);
+}
+
+.gezinti-menü a:hover::after {
+  width: 100%;
+}
+
+.gezinti-menü a.aktif {
+  color: var(--renk-vurgu);
+}
+
+.gezinti-menü a.aktif::after {
+  width: 100%;
+}
+
+.gezinti-sağ {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  flex-shrink: 0;
+}
+
+.ayarlar-butonu {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--renk-metin-ikincil);
+  font-size: 1.25rem;
+  padding: 6px;
+  border-radius: var(--yarıçap);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: color var(--geçiş);
+}
+
+.ayarlar-butonu:hover {
+  color: var(--renk-metin);
+}
+
+.hamburger {
+  display: none;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--renk-metin);
+  font-size: 1.5rem;
+  padding: 4px;
+}
+
+/* #endregion */
+/* #region Ayarlar Paneli */
+
+.ayarlar-paneli {
+  display: none;
+  position: fixed;
+  top: 72px;
+  right: 1.5rem;
+  z-index: 200;
+  background: var(--renk-yüzey);
+  border: 1px solid var(--renk-kenar);
+  border-radius: var(--yarıçap);
+  padding: 1.25rem;
+  min-width: 220px;
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+}
+
+.ayarlar-paneli.açık {
+  display: block;
+}
+
+.ayarlar-bölüm {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+}
+
+.ayarlar-etiket {
+  font-family: var(--font-başlık);
+  font-size: 0.8rem;
+  color: var(--renk-metin-ikincil);
+  letter-spacing: 0.05em;
+}
+
+.tema-toggle {
+  display: flex;
+  background: var(--renk-arkaplan);
+  border: 1px solid var(--renk-kenar);
+  border-radius: var(--yarıçap);
+  overflow: hidden;
+}
+
+.tema-seçenek {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 0.6rem 0.25rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--renk-metin-ikincil);
+  font-family: var(--font-başlık);
+  font-size: 0.7rem;
+  transition:
+    background-color var(--geçiş),
+    color var(--geçiş);
+}
+
+.tema-seçenek i {
+  font-size: 1rem;
+}
+
+.tema-seçenek:hover {
+  color: var(--renk-metin);
+  background: var(--renk-kenar);
+}
+
+.tema-seçenek.aktif {
+  background: var(--renk-vurgu);
+  color: var(--renk-arkaplan);
+}
+
+/* #endregion */
+/* #region Dil Toggle */
+
+.ayarlar-ayraç {
+  height: 1px;
+  background: var(--renk-kenar);
+  margin: 0.75rem 0;
+}
+
+.dil-toggle {
+  display: flex;
+  background: var(--renk-arkaplan);
+  border: 1px solid var(--renk-kenar);
+  border-radius: var(--yarıçap);
+  overflow: hidden;
+}
+
+.dil-seçenek {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.5rem;
+  font-family: var(--font-başlık);
+  font-size: 0.85rem;
+  color: var(--renk-metin-ikincil);
+  text-decoration: none;
+  transition:
+    background-color var(--geçiş),
+    color var(--geçiş);
+}
+
+.dil-seçenek:hover {
+  color: var(--renk-metin);
+  background: var(--renk-kenar);
+}
+
+.dil-seçenek.aktif {
+  background: var(--renk-vurgu);
+  color: var(--renk-arkaplan);
+}
+
+/* #endregion */
+/* #region Mobil Menü */
+
+.mobil-menü {
+  display: none;
+  position: fixed;
+  top: 72px;
+  left: 1.5rem;
+  right: 1.5rem;
+  z-index: 99;
+  background: var(--renk-arkaplan);
+  border: 1px solid var(--renk-kenar);
+  border-radius: var(--yarıçap);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
+  backdrop-filter: blur(12px);
+}
+
+.mobil-menü.açık {
+  display: block;
+}
+
+.mobil-menü-liste {
+  list-style: none;
+  padding: 0.75rem;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+}
+
+.mobil-menü-liste li:nth-child(odd) {
+  border-right: 1px solid var(--renk-kenar);
+}
+
+.mobil-menü-liste li a {
+  display: flex;
+  align-items: center;
+  padding: 0.6rem 1rem;
+  font-family: var(--font-başlık);
+  font-size: 0.95rem;
+  color: var(--renk-metin-ikincil);
+  text-decoration: none;
+  border-radius: var(--yarıçap);
+  transition:
+    color var(--geçiş),
+    background-color var(--geçiş);
+}
+
+.mobil-menü-liste li a:hover {
+  color: var(--renk-metin);
+  background-color: var(--renk-arkaplan);
+}
+
+.mobil-menü-liste li a.aktif {
+  color: var(--renk-vurgu);
+}
+
+/* #endregion */
+/* #region Mobil */
+
+@media (max-width: 900px) {
+  .gezinti {
+    padding: 0 1rem;
+  }
+
+  .gezinti-menü {
+    display: none;
+  }
+
+  .hamburger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+/* #endregion */

@@ -1,0 +1,14 @@
+{
+  "tr": {
+    "ad": "DersTakip",
+    "açıklama": "Üniversite derslerini ve devamsızlıkları takip eden Android uygulaması."
+  },
+  "en": {
+    "ad": "DersTakip",
+    "açıklama": "An Android app for tracking university courses and attendance."
+  },
+  "kategori": "uygulama",
+  "durum": "gelistiriliyor",
+  "ikon": "ti-device-mobile",
+  "sıra": 1
+}

@@ -1,0 +1,50 @@
+---
+import TemelDüzen from "../../layouts/TemelDüzen.astro";
+import "../../styles/blog.css";
+import { getCollection } from "astro:content";
+import { çeviriAl, dilAl, type Dil } from "../../i18n/utils";
+
+export function getStaticPaths() {
+  return [{ params: { lang: "tr" } }, { params: { lang: "en" } }];
+}
+
+const dil = dilAl(Astro.url) as Dil;
+const t = çeviriAl(dil);
+
+const tümYazılar = await getCollection("blog");
+const yazılar = tümYazılar
+  .filter((y) => y.data.dil === dil)
+  .sort((a, b) => b.data.tarih.getTime() - a.data.tarih.getTime());
+
+const tarihDili = dil === "tr" ? "tr-TR" : "en-US";
+---
+
+<TemelDüzen başlık={t.blog.başlık} dil={dil} açıklama={t.ogAçıklamalar.blog}>
+  <h1>{t.blog.başlık}</h1>
+
+  <div class="blog-listesi">
+    {
+      yazılar.map((yazı) => (
+        <a
+          href={`/${dil}/blog/${yazı.id.replace(`.${yazı.data.dil}.md`, "")}`}
+          class="blog-karti"
+        >
+          <div class="blog-karti-tarih">
+            {yazı.data.tarih.toLocaleDateString(tarihDili, {
+              year: "numeric",
+              month: "long",
+              day: "numeric",
+            })}
+          </div>
+          <div class="blog-karti-başlık">{yazı.data.başlık}</div>
+          <div class="blog-karti-açıklama">{yazı.data.açıklama}</div>
+          <div class="blog-karti-etiketler">
+            {yazı.data.etiketler.map((etiket) => (
+              <span class="blog-etiket">{etiket}</span>
+            ))}
+          </div>
+        </a>
+      ))
+    }
+  </div>
+</TemelDüzen>
