@@ -20,7 +20,10 @@ const ogGörselUrl = new URL(
   Astro.site,
 ).toString();
 const sayfaUrl = new URL(Astro.url.pathname, Astro.site).toString();
-const ogBaşlık = `${başlık} — Marco La'datema`;
+const ogBaşlık =
+  başlık === "Ana Sayfa" || başlık === "Home"
+    ? `Marco La'datema — Geliştirici, Yapıcı, Oyuncu`
+    : `${başlık} — Marco La'datema`;
 const t = çeviriAl(dil);
 ---
 
@@ -52,6 +55,7 @@ const t = çeviriAl(dil);
     <meta name="twitter:image" content={ogGörselUrl} />
 
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+
     <script is:inline>
       const tema = localStorage.getItem("tema") ?? "otomatik";
       const koyuMu =
@@ -62,7 +66,10 @@ const t = çeviriAl(dil);
         "data-tema",
         koyuMu ? "koyu" : "açık",
       );
+      const zoom = localStorage.getItem("zoom") ?? "1";
+      document.documentElement.style.zoom = zoom;
     </script>
+
     <link
       rel="stylesheet"
       href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"

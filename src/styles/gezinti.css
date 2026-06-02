@@ -231,6 +231,61 @@
 }
 
 /* #endregion */
+/* #region Boyut Toggle */
+
+.boyut-toggle {
+  display: flex;
+  background: var(--renk-arkaplan);
+  border: 1px solid var(--renk-kenar);
+  border-radius: var(--yarıçap);
+  overflow: hidden;
+}
+
+.boyut-seçenek {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  padding: 0.6rem 0.25rem;
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--renk-metin-ikincil);
+  font-family: var(--font-başlık);
+  font-size: 0.7rem;
+  transition:
+    background-color var(--geçiş),
+    color var(--geçiş);
+}
+
+.boyut-seçenek:hover {
+  color: var(--renk-metin);
+  background: var(--renk-kenar);
+}
+
+.boyut-seçenek.aktif {
+  background: var(--renk-vurgu);
+  color: var(--renk-arkaplan);
+}
+
+.boyut-harf {
+  font-family: var(--font-başlık);
+  font-weight: 600;
+  line-height: 1;
+}
+
+.boyut-seçenek:nth-child(1) .boyut-harf {
+  font-size: 0.75rem;
+}
+.boyut-seçenek:nth-child(2) .boyut-harf {
+  font-size: 1rem;
+}
+.boyut-seçenek:nth-child(3) .boyut-harf {
+  font-size: 1.25rem;
+}
+
+/* #endregion */
 /* #region Mobil Menü */
 
 .mobil-menü {

@@ -14,7 +14,11 @@
     "açık": "Açık",
     "otomatik": "Otomatik",
     "koyu": "Koyu",
-    "dil": "Dil"
+    "dil": "Dil",
+    "boyut": "Boyut",
+    "küçük": "Küçük",
+    "normal": "Normal",
+    "büyük": "Büyük"
   },
 
   "anaSayfa": {
@@ -36,7 +40,7 @@
 
   "projeler": {
     "başlık": "Projeler",
-    "projelereGit": "← Projelere Dön"
+    "projelereDön": "← Projelere dön"
   },
 
   "başarılar": {
@@ -45,11 +49,12 @@
 
   "blog": {
     "başlık": "Blog",
-    "blogaDön": "← Blog'a Dön"
+    "blogaDön": "← Blog'a dön"
   },
 
   "sosyalMedya": {
-    "başlık": "Sosyal Medya"
+    "başlık": "Sosyal Medya",
+    "platformYok": "Henüz hiçbir platform eklenmedi."
   },
 
   "henüzHazırDeğil": {
@@ -96,7 +101,7 @@
   },
 
   "ogAçıklamalar": {
-    "anaSayfa": "Geliştirici, yapıcı ve oyuncu. Oyunlar, uygulamalar, eklentiler ve cihazlar üretiyorum.",
+    "anaSayfa": "Geliştirici, yapıcı ve oyuncu. Unity ile oyunlar, uygulamalar, eklentiler ve cihazlar üretiyorum. Hayallerimi sisteme, sistemleri oyuna dönüştürüyorum.",
     "projeler": "Marco La'datema'nın geliştirdiği oyunlar, uygulamalar, eklentiler ve cihazlar.",
     "başarılar": "Marco La'datema'nın aldığı ödüller ve ulaştığı kilometre taşları.",
     "blog": "Geliştirici notları, fikirler ve deneyimler.",

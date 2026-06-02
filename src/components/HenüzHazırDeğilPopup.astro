@@ -112,23 +112,23 @@ const t = çeviriAl(dil);
   const kaplama = document.getElementById("henuz-hazır-popup-kaplama");
   const kapatButon = document.getElementById("henuz-hazır-kapat");
 
-  function henüzHazırGöster() {
+  function henüzHazırDeğilGöster() {
     if (kaplama) kaplama.classList.remove("gizli");
   }
 
-  function henüzHazırGizle() {
+  function henüzHazırDeğilGizle() {
     if (kaplama) kaplama.classList.add("gizli");
   }
 
-  kapatButon?.addEventListener("click", henüzHazırGizle);
+  kapatButon?.addEventListener("click", henüzHazırDeğilGizle);
 
   kaplama?.addEventListener("click", (olay) => {
-    if (olay.target === kaplama) henüzHazırGizle();
+    if (olay.target === kaplama) henüzHazırDeğilGizle();
   });
 
   document.addEventListener("keydown", (olay) => {
-    if (olay.key === "Escape") henüzHazırGizle();
+    if (olay.key === "Escape") henüzHazırDeğilGizle();
   });
 
-  (window as any).henüzHazırGöster = henüzHazırGöster;
+  (window as any).henüzHazırDeğilGöster = henüzHazırDeğilGöster;
 </script>

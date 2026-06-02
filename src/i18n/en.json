@@ -14,7 +14,11 @@
     "açık": "Light",
     "otomatik": "Auto",
     "koyu": "Dark",
-    "dil": "Language"
+    "dil": "Language",
+    "boyut": "Size",
+    "küçük": "Small",
+    "normal": "Normal",
+    "büyük": "Large"
   },
 
   "anaSayfa": {
@@ -36,7 +40,7 @@
 
   "projeler": {
     "başlık": "Projects",
-    "projelereGit": "← Back to Projects"
+    "projelereDön": "← Back to Projects"
   },
 
   "başarılar": {
@@ -49,7 +53,8 @@
   },
 
   "sosyalMedya": {
-    "başlık": "Social Media"
+    "başlık": "Social Media",
+    "platformYok": "No platforms have been added yet."
   },
 
   "henüzHazırDeğil": {
@@ -96,7 +101,7 @@
   },
 
   "ogAçıklamalar": {
-    "anaSayfa": "Developer, builder, and gamer. Making games, apps, plugins, and devices.",
+    "anaSayfa": "Developer, builder, and gamer. Making games, apps, plugins, and devices with Unity. Turning dreams into systems, and systems into games.",
     "projeler": "Games, apps, plugins, and devices developed by Marco La'datema.",
     "başarılar": "Awards and milestones achieved by Marco La'datema.",
     "blog": "Developer notes, ideas, and experiences.",

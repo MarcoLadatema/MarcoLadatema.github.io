@@ -10,6 +10,10 @@ interface Props {
 
 const { dil, t } = Astro.props;
 const sayfaYolu = decodeURIComponent(Astro.url.pathname);
+const normalleştirilmişYol =
+  sayfaYolu.endsWith("/") && sayfaYolu !== `/${dil}/`
+    ? sayfaYolu.slice(0, -1)
+    : sayfaYolu;
 
 const bağlantılar = [
   { ad: t.gezinti.anaSayfa, yol: `/${dil}/` },
@@ -21,7 +25,6 @@ const bağlantılar = [
 ];
 
 const diğerDil = dil === "tr" ? "en" : "tr";
-const diğerDilEtiket = dil === "tr" ? "EN" : "TR";
 
 const blogDetayEşleşmesi = sayfaYolu.match(new RegExp(`^/${dil}/blog/(.+)$`));
 let mevcutYol: string;
@@ -57,7 +60,7 @@ if (blogDetayEşleşmesi) {
         <li>
           <a
             href={bağlantı.yol}
-            class={sayfaYolu === bağlantı.yol ? "aktif" : ""}
+            class={normalleştirilmişYol === bağlantı.yol ? "aktif" : ""}
           >
             {bağlantı.ad}
           </a>
@@ -84,6 +87,7 @@ if (blogDetayEşleşmesi) {
         <i class="ti ti-sun" aria-hidden="true"></i>
         <span>{t.ayarlar.açık}</span>
       </button>
+
       <button
         class="tema-seçenek"
         data-tema="otomatik"
@@ -92,13 +96,16 @@ if (blogDetayEşleşmesi) {
         <i class="ti ti-settings-automation" aria-hidden="true"></i>
         <span>{t.ayarlar.otomatik}</span>
       </button>
+
       <button class="tema-seçenek" data-tema="koyu" aria-label="Koyu tema">
         <i class="ti ti-moon" aria-hidden="true"></i>
         <span>{t.ayarlar.koyu}</span>
       </button>
     </div>
   </div>
+
   <div class="ayarlar-ayraç"></div>
+
   <div class="ayarlar-bölüm">
     <div class="ayarlar-etiket">{t.ayarlar.dil}</div>
     <div class="dil-toggle">
@@ -112,6 +119,26 @@ if (blogDetayEşleşmesi) {
       >
     </div>
   </div>
+
+  <div class="ayarlar-ayraç"></div>
+
+  <div class="ayarlar-bölüm">
+    <div class="ayarlar-etiket">{t.ayarlar.boyut}</div>
+    <div class="boyut-toggle" id="boyut-toggle">
+      <button class="boyut-seçenek" data-zoom="0.85" aria-label="Küçük boyut">
+        <span class="boyut-harf">A</span>
+        <span>{t.ayarlar.küçük}</span>
+      </button>
+      <button class="boyut-seçenek" data-zoom="1" aria-label="Normal boyut">
+        <span class="boyut-harf">A</span>
+        <span>{t.ayarlar.normal}</span>
+      </button>
+      <button class="boyut-seçenek" data-zoom="1.15" aria-label="Büyük boyut">
+        <span class="boyut-harf">A</span>
+        <span>{t.ayarlar.büyük}</span>
+      </button>
+    </div>
+  </div>
 </div>
 
 <div class="mobil-menü" aria-hidden="true">
@@ -121,7 +148,7 @@ if (blogDetayEşleşmesi) {
         <li>
           <a
             href={bağlantı.yol}
-            class={sayfaYolu === bağlantı.yol ? "aktif" : ""}
+            class={normalleştirilmişYol === bağlantı.yol ? "aktif" : ""}
           >
             {bağlantı.ad}
           </a>
@@ -234,6 +261,28 @@ if (blogDetayEşleşmesi) {
         : "tr";
       localStorage.setItem("dil", seçilenDil);
       localStorage.setItem("ayarlar-paneli-açık", "true");
+    });
+  });
+
+  const kayıtlıZoom = localStorage.getItem("zoom") ?? "1";
+  document.documentElement.style.zoom = kayıtlıZoom;
+
+  document.querySelectorAll(".boyut-seçenek").forEach((btn) => {
+    const btnZoom = (btn as HTMLElement).dataset.zoom ?? "1";
+    if (btnZoom === kayıtlıZoom) btn.classList.add("aktif");
+
+    btn.addEventListener("click", () => {
+      const seçilenZoom = (btn as HTMLElement).dataset.zoom ?? "1";
+      localStorage.setItem("zoom", seçilenZoom);
+      document.documentElement.style.zoom = seçilenZoom;
+      document
+        .querySelectorAll(".boyut-seçenek")
+        .forEach((b) =>
+          b.classList.toggle(
+            "aktif",
+            (b as HTMLElement).dataset.zoom === seçilenZoom,
+          ),
+        );
     });
   });
 </script>
