@@ -20,7 +20,10 @@ jobs:
       - uses: actions/checkout@v4
       - uses: actions/setup-node@v4
         with:
-          node-version: 22
+          # Geliştirme ortamıyla aynı sürüm. Node 22 npm 10 ile gelir ve npm 10,
+          # isteğe bağlı peer bağımlılıkları kilit dosyasında arar; kilit npm 11
+          # ile üretildiği için `npm ci` "Missing: chokidar@3.6.0" diye durur.
+          node-version: 24
           cache: npm
       - run: npm ci
       - run: npm run build
