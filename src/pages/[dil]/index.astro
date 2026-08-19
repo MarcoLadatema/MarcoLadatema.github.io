@@ -1,20 +1,21 @@
 ---
 import TemelDüzen from "../../layouts/TemelDüzen.astro";
 import { getCollection } from "astro:content";
-import { çeviriAl, dilAl, type Dil } from "../../i18n/utils";
+import { çeviriAl, dilAl } from "../../i18n/çeviriAraçları";
+import { bölümYolu, kayıtYolu } from "../../i18n/adresHaritası";
 import "../../styles/ana-sayfa.css";
 import "../../styles/projeler.css";
 
 export function getStaticPaths() {
-  return [{ params: { lang: "tr" } }, { params: { lang: "en" } }];
+  return [{ params: { dil: "tr" } }, { params: { dil: "en" } }];
 }
 
-const dil = dilAl(Astro.url) as Dil;
+const dil = dilAl(Astro.url);
 const t = çeviriAl(dil);
 
 const tümProjeler = await getCollection("projeler");
 const öneCıkanProjeler = tümProjeler
-  .filter((p) => p.id === "steadystudy" || p.id === "derstakip")
+  .filter((p) => p.id === "steady-study" || p.id === "ders-takip")
   .sort((a, b) => {
     const sıraA = a.data.sıra ?? Infinity;
     const sıraB = b.data.sıra ?? Infinity;
@@ -52,7 +53,7 @@ const öneCıkanProjeler = tümProjeler
     <div class="projeler-izgara one-cikan-projeler-izgara">
       {
         öneCıkanProjeler.map((proje) => (
-          <a href={`/${dil}/projects/${proje.id}`} class="proje-karti">
+          <a href={kayıtYolu(dil, "projeler", proje.id)} class="proje-karti">
             <div class="proje-karti-görsel">
               {proje.data.görseller?.find((g) => g.kapak) ? (
                 <img
@@ -88,14 +89,14 @@ const öneCıkanProjeler = tümProjeler
       }
     </div>
     <div class="tüm-projeler-link">
-      <a href={`/${dil}/projeler`}>{t.anaSayfa.tümProjeleriGör}</a>
+      <a href={bölümYolu(dil, "projeler")}>{t.anaSayfa.tümProjeleriGör}</a>
     </div>
   </section>
 
   <section class="ana-bölüm iletisime-gec-bolumu">
     <h2 class="bölüm-başlık">{t.anaSayfa.iletişimeGeç}</h2>
     <p>{t.anaSayfa.iletişimMetin}</p>
-    <a href={`/${dil}/iletişim`} class="karşılama-buton"
+    <a href={bölümYolu(dil, "iletişim")} class="karşılama-buton"
       >{t.anaSayfa.iletişimButon}</a
     >
   </section>

@@ -23,5 +23,11 @@ pnpm-debug.log*
 # jetbrains setting folder
 .idea/
 
-# Website test files
+# VS Code yerleşik tarayıcısında yayınlanmış siteyi açmak için kullanılan yerel dosya
 Website.html
+
+# Claude Code yerel hafıza, oturum arşivi ve kişisel ayarlar
+# .claude/settings.json paylaşılan proje ayarıdır ve depoya dahildir.
+.claude/Memory/
+.claude/Arşiv/
+.claude/settings.local.json

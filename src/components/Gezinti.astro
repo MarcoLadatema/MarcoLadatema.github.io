@@ -1,7 +1,7 @@
 ---
-import type { Dil } from "../i18n/utils";
-import type { çeviriAl } from "../i18n/utils";
-import { getCollection } from "astro:content";
+import type { Dil } from "../i18n/çeviriAraçları";
+import type { çeviriAl } from "../i18n/çeviriAraçları";
+import { bölümYolu, diğerDilYolu } from "../i18n/adresHaritası";
 
 interface Props {
   dil: Dil;
@@ -17,35 +17,15 @@ const normalleştirilmişYol =
 
 const bağlantılar = [
   { ad: t.gezinti.anaSayfa, yol: `/${dil}/` },
-  { ad: t.gezinti.projeler, yol: `/${dil}/projeler` },
-  { ad: t.gezinti.başarılar, yol: `/${dil}/başarılar` },
-  { ad: t.gezinti.blog, yol: `/${dil}/blog` },
-  { ad: t.gezinti.sosyalMedya, yol: `/${dil}/sosyal-medya` },
-  { ad: t.gezinti.iletişim, yol: `/${dil}/iletişim` },
+  { ad: t.gezinti.projeler, yol: bölümYolu(dil, "projeler") },
+  { ad: t.gezinti.başarılar, yol: bölümYolu(dil, "başarılar") },
+  { ad: t.gezinti.blog, yol: bölümYolu(dil, "blog") },
+  { ad: t.gezinti.sosyalMedya, yol: bölümYolu(dil, "sosyalMedya") },
+  { ad: t.gezinti.iletişim, yol: bölümYolu(dil, "iletişim") },
 ];
 
 const diğerDil = dil === "tr" ? "en" : "tr";
-
-const blogDetayEşleşmesi = sayfaYolu.match(new RegExp(`^/${dil}/blog/(.+)$`));
-let mevcutYol: string;
-
-if (blogDetayEşleşmesi) {
-  const mevcutKimlik = blogDetayEşleşmesi[1];
-  const tümYazılar = await getCollection("blog");
-  const eşYazı = tümYazılar.find(
-    (y) =>
-      y.data.dil === diğerDil &&
-      y.id.replace(`.${diğerDil}.md`, "") === mevcutKimlik,
-  );
-  if (eşYazı) {
-    const diğerKimlik = eşYazı.id.replace(`.${diğerDil}.md`, "");
-    mevcutYol = `/${diğerDil}/blog/${diğerKimlik}`;
-  } else {
-    mevcutYol = `/${diğerDil}/blog`;
-  }
-} else {
-  mevcutYol = sayfaYolu.replace(`/${dil}`, `/${diğerDil}`);
-}
+const mevcutYol = await diğerDilYolu(sayfaYolu, diğerDil);
 ---
 
 <nav class="gezinti">
@@ -125,15 +105,15 @@ if (blogDetayEşleşmesi) {
   <div class="ayarlar-bölüm">
     <div class="ayarlar-etiket">{t.ayarlar.boyut}</div>
     <div class="boyut-toggle" id="boyut-toggle">
-      <button class="boyut-seçenek" data-zoom="0.85" aria-label="Küçük boyut">
+      <button class="boyut-seçenek" data-boyut="0.85" aria-label="Küçük boyut">
         <span class="boyut-harf">A</span>
         <span>{t.ayarlar.küçük}</span>
       </button>
-      <button class="boyut-seçenek" data-zoom="1" aria-label="Normal boyut">
+      <button class="boyut-seçenek" data-boyut="1" aria-label="Normal boyut">
         <span class="boyut-harf">A</span>
         <span>{t.ayarlar.normal}</span>
       </button>
-      <button class="boyut-seçenek" data-zoom="1.15" aria-label="Büyük boyut">
+      <button class="boyut-seçenek" data-boyut="1.15" aria-label="Büyük boyut">
         <span class="boyut-harf">A</span>
         <span>{t.ayarlar.büyük}</span>
       </button>
@@ -159,45 +139,52 @@ if (blogDetayEşleşmesi) {
 </div>
 
 <script>
-  const hamburger = document.querySelector(".hamburger") as HTMLButtonElement;
-  const mobilMenü = document.querySelector(".mobil-menü") as HTMLElement;
+  const hamburger = document.querySelector<HTMLButtonElement>(".hamburger");
+  const mobilMenü = document.querySelector<HTMLElement>(".mobil-menü");
 
-  hamburger.addEventListener("click", () => {
-    const açık = mobilMenü.classList.toggle("açık");
-    hamburger.setAttribute("aria-expanded", açık.toString());
-    hamburger.querySelector("i")!.className = açık ? "ti ti-x" : "ti ti-menu-2";
-  });
+  function hamburgerİkonunuGüncelle(açıkMı: boolean) {
+    const ikon = hamburger?.querySelector("i");
+    if (ikon) ikon.className = açıkMı ? "ti ti-x" : "ti ti-menu-2";
+  }
 
-  document.querySelectorAll(".mobil-menü-liste a").forEach((link) => {
-    link.addEventListener("click", () => {
-      mobilMenü.classList.remove("açık");
-      hamburger.setAttribute("aria-expanded", "false");
-      hamburger.querySelector("i")!.className = "ti ti-menu-2";
+  function mobilMenüyüKapat() {
+    mobilMenü?.classList.remove("açık");
+    hamburger?.setAttribute("aria-expanded", "false");
+    hamburgerİkonunuGüncelle(false);
+  }
+
+  if (hamburger && mobilMenü) {
+    hamburger.addEventListener("click", () => {
+      const açıkMı = mobilMenü.classList.toggle("açık");
+      hamburger.setAttribute("aria-expanded", açıkMı.toString());
+      hamburgerİkonunuGüncelle(açıkMı);
     });
+  }
+
+  document.querySelectorAll(".mobil-menü-liste a").forEach((bağlantı) => {
+    bağlantı.addEventListener("click", mobilMenüyüKapat);
   });
 
-  const ayarlarButonu = document.getElementById(
-    "ayarlar-butonu",
-  ) as HTMLButtonElement;
-  const ayarlarPaneli = document.getElementById(
-    "ayarlar-paneli",
-  ) as HTMLElement;
+  const ayarlarButonu = document.getElementById("ayarlar-butonu");
+  const ayarlarPaneli = document.getElementById("ayarlar-paneli");
 
-  ayarlarButonu.addEventListener("click", (e) => {
-    e.stopPropagation();
-    const açık = ayarlarPaneli.classList.toggle("açık");
-    ayarlarPaneli.setAttribute("aria-hidden", (!açık).toString());
-  });
+  if (ayarlarButonu && ayarlarPaneli) {
+    ayarlarButonu.addEventListener("click", (olay) => {
+      olay.stopPropagation();
+      const açıkMı = ayarlarPaneli.classList.toggle("açık");
+      ayarlarPaneli.setAttribute("aria-hidden", (!açıkMı).toString());
+    });
 
-  document.addEventListener("click", (e) => {
-    if (
-      !ayarlarPaneli.contains(e.target as Node) &&
-      !ayarlarButonu.contains(e.target as Node)
-    ) {
-      ayarlarPaneli.classList.remove("açık");
-      ayarlarPaneli.setAttribute("aria-hidden", "true");
-    }
-  });
+    document.addEventListener("click", (olay) => {
+      if (
+        !ayarlarPaneli.contains(olay.target as Node) &&
+        !ayarlarButonu.contains(olay.target as Node)
+      ) {
+        ayarlarPaneli.classList.remove("açık");
+        ayarlarPaneli.setAttribute("aria-hidden", "true");
+      }
+    });
+  }
 
   type TemaSeçimi = "açık" | "otomatik" | "koyu";
 
@@ -248,7 +235,7 @@ if (blogDetayEşleşmesi) {
     });
 
   // Ayarlar paneli sayfa geçişi sonrası
-  if (localStorage.getItem("ayarlar-paneli-açık") === "true") {
+  if (ayarlarPaneli && localStorage.getItem("ayarlar-paneli-açık") === "true") {
     ayarlarPaneli.classList.add("açık");
     ayarlarPaneli.setAttribute("aria-hidden", "false");
     localStorage.removeItem("ayarlar-paneli-açık");
@@ -264,23 +251,30 @@ if (blogDetayEşleşmesi) {
     });
   });
 
-  const kayıtlıZoom = localStorage.getItem("zoom") ?? "1";
-  document.documentElement.style.zoom = kayıtlıZoom;
+  // Kök font-size ölçeklenir; tüm ölçüler rem olduğu için sayfa bütün olarak büyür.
+  // style.zoom kullanılmaz — tarayıcılar arası tutarsızdır ve kullanıcının
+  // kendi yakınlaştırmasıyla çakışır.
+  function yazıBoyutunuUygula(oran: string) {
+    document.documentElement.style.fontSize = Number(oran) * 100 + "%";
+  }
 
-  document.querySelectorAll(".boyut-seçenek").forEach((btn) => {
-    const btnZoom = (btn as HTMLElement).dataset.zoom ?? "1";
-    if (btnZoom === kayıtlıZoom) btn.classList.add("aktif");
+  const kayıtlıBoyut = localStorage.getItem("yazıBoyutu") ?? "1";
+  yazıBoyutunuUygula(kayıtlıBoyut);
 
-    btn.addEventListener("click", () => {
-      const seçilenZoom = (btn as HTMLElement).dataset.zoom ?? "1";
-      localStorage.setItem("zoom", seçilenZoom);
-      document.documentElement.style.zoom = seçilenZoom;
+  document.querySelectorAll(".boyut-seçenek").forEach((düğme) => {
+    const düğmeBoyutu = (düğme as HTMLElement).dataset.boyut ?? "1";
+    if (düğmeBoyutu === kayıtlıBoyut) düğme.classList.add("aktif");
+
+    düğme.addEventListener("click", () => {
+      const seçilenBoyut = (düğme as HTMLElement).dataset.boyut ?? "1";
+      localStorage.setItem("yazıBoyutu", seçilenBoyut);
+      yazıBoyutunuUygula(seçilenBoyut);
       document
         .querySelectorAll(".boyut-seçenek")
-        .forEach((b) =>
-          b.classList.toggle(
+        .forEach((diğer) =>
+          diğer.classList.toggle(
             "aktif",
-            (b as HTMLElement).dataset.zoom === seçilenZoom,
+            (diğer as HTMLElement).dataset.boyut === seçilenBoyut,
           ),
         );
     });

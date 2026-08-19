@@ -2,13 +2,13 @@
 import TemelDüzen from "../../layouts/TemelDüzen.astro";
 import "../../styles/iletişim.css";
 import { getCollection } from "astro:content";
-import { çeviriAl, dilAl, type Dil } from "../../i18n/utils";
+import { çeviriAl, type Dil } from "../../i18n/çeviriAraçları";
 
-export function getStaticPaths() {
-  return [{ params: { lang: "tr" } }, { params: { lang: "en" } }];
+interface Props {
+  dil: Dil;
 }
 
-const dil = dilAl(Astro.url) as Dil;
+const { dil } = Astro.props;
 const t = çeviriAl(dil);
 
 const projeler = await getCollection("projeler");

@@ -2,9 +2,27 @@
 
 ---
 
-<html>
+<!doctype html>
+<html lang="tr">
   <head>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Marco La'datema</title>
+    <meta
+      name="description"
+      content="Marco La'datema — Geliştirici, Yapıcı, Oyuncu"
+    />
+    <link rel="icon" type="image/x-icon" href="/favicon.ico" />
+    <link rel="alternate" hreflang="tr" href="https://marcoladatema.com/tr/" />
+    <link rel="alternate" hreflang="en" href="https://marcoladatema.com/en/" />
+    <link
+      rel="alternate"
+      hreflang="x-default"
+      href="https://marcoladatema.com/tr/"
+    />
+    <noscript>
+      <meta http-equiv="refresh" content="0; url=/tr/" />
+    </noscript>
     <script>
       const kaydedilmiş = localStorage.getItem("dil");
       const tarayıcıDili = navigator.language.substring(0, 2);
@@ -19,5 +37,13 @@
       window.location.replace("/" + hedef + "/");
     </script>
   </head>
-  <body></body>
+  <body>
+    <noscript>
+      <p>Dil seçin / Choose your language:</p>
+      <ul>
+        <li><a href="/tr/">Türkçe</a></li>
+        <li><a href="/en/">English</a></li>
+      </ul>
+    </noscript>
+  </body>
 </html>

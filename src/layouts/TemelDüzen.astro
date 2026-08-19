@@ -1,7 +1,9 @@
 ---
 import "../styles/genel.css";
 import "../styles/gezinti.css";
-import { çeviriAl, type Dil } from "../i18n/utils";
+import { çeviriAl, type Dil } from "../i18n/çeviriAraçları";
+import { diğerDilYolu } from "../i18n/adresHaritası";
+import TemaBaşlatıcı from "../components/TemaBaşlatıcı.astro";
 import YükleniyorAnimasyon from "../components/YükleniyorAnimasyon.astro";
 import Gezinti from "../components/Gezinti.astro";
 import AltBilgi from "../components/AltBilgi.astro";
@@ -25,6 +27,23 @@ const ogBaşlık =
     ? `Marco La'datema — Geliştirici, Yapıcı, Oyuncu`
     : `${başlık} — Marco La'datema`;
 const t = çeviriAl(dil);
+
+// Diller arası eşleşme adres haritasından gelir; bölüm slug'ları dile göre
+// ayrıştığı için dil önekini değiştirmek yeterli değildir.
+const sayfaYolu = decodeURIComponent(Astro.url.pathname);
+
+// Derleme çıktısı dizin biçiminde olduğu için canonical adres eğik çizgiyle
+// biter; hreflang adreslerinin ona birebir eşleşmesi gerekir.
+function dizinBiçimine(yol: string): string {
+  return yol.endsWith("/") ? yol : `${yol}/`;
+}
+
+const türkçeYol = dizinBiçimine(
+  dil === "tr" ? sayfaYolu : await diğerDilYolu(sayfaYolu, "tr"),
+);
+const ingilizceYol = dizinBiçimine(
+  dil === "en" ? sayfaYolu : await diğerDilYolu(sayfaYolu, "en"),
+);
 ---
 
 <!doctype html>
@@ -55,25 +74,20 @@ const t = çeviriAl(dil);
     <meta name="twitter:image" content={ogGörselUrl} />
 
     <link rel="icon" type="image/x-icon" href="/favicon.ico" />
-
-    <script is:inline>
-      const tema = localStorage.getItem("tema") ?? "otomatik";
-      const koyuMu =
-        tema === "koyu" ||
-        (tema === "otomatik" &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches);
-      document.documentElement.setAttribute(
-        "data-tema",
-        koyuMu ? "koyu" : "açık",
-      );
-      const zoom = localStorage.getItem("zoom") ?? "1";
-      document.documentElement.style.zoom = zoom;
-    </script>
-
+    <link rel="canonical" href={sayfaUrl} />
     <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"
+      rel="alternate"
+      hreflang="tr"
+      href={new URL(türkçeYol, Astro.site).toString()}
     />
+    <link
+      rel="alternate"
+      hreflang="en"
+      href={new URL(ingilizceYol, Astro.site).toString()}
+    />
+
+    <TemaBaşlatıcı />
+
   </head>
   <body>
     <YükleniyorAnimasyon />

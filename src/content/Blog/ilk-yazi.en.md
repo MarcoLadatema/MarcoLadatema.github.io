@@ -4,7 +4,7 @@ tarih: 2026-05-23
 açıklama: "The first blog post of this site."
 etiketler: ["General"]
 dil: "en"
-slug: "ilk-yazi"
+slug: "first-blog-post"
 ---
 
 ## Hello

@@ -2,13 +2,14 @@
 import TemelDüzen from "../../layouts/TemelDüzen.astro";
 import "../../styles/blog.css";
 import { getCollection } from "astro:content";
-import { çeviriAl, dilAl, type Dil } from "../../i18n/utils";
+import { çeviriAl, type Dil } from "../../i18n/çeviriAraçları";
+import { kayıtYolu } from "../../i18n/adresHaritası";
 
-export function getStaticPaths() {
-  return [{ params: { lang: "tr" } }, { params: { lang: "en" } }];
+interface Props {
+  dil: Dil;
 }
 
-const dil = dilAl(Astro.url) as Dil;
+const { dil } = Astro.props;
 const t = çeviriAl(dil);
 
 const tümYazılar = await getCollection("blog");
@@ -26,7 +27,7 @@ const tarihDili = dil === "tr" ? "tr-TR" : "en-US";
     {
       yazılar.map((yazı) => (
         <a
-          href={`/${dil}/blog/${yazı.id.replace(`.${yazı.data.dil}.md`, "")}`}
+          href={kayıtYolu(dil, "blog", yazı.data.slug)}
           class="blog-karti"
         >
           <div class="blog-karti-tarih">

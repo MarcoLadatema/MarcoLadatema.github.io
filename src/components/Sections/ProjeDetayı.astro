@@ -1,26 +1,17 @@
 ---
-import TemelDüzen from "../../../layouts/TemelDüzen.astro";
-import { getCollection, getEntry } from "astro:content";
-import { çeviriAl, dilAl, type Dil } from "../../../i18n/utils";
-import "../../../styles/projeler.css";
+import TemelDüzen from "../../layouts/TemelDüzen.astro";
+import { getEntry, type CollectionEntry } from "astro:content";
+import { çeviriAl, type Dil } from "../../i18n/çeviriAraçları";
+import { bölümYolu } from "../../i18n/adresHaritası";
+import "../../styles/projeler.css";
 
-export async function getStaticPaths() {
-  const projeler = await getCollection("projeler");
-  const diller = ["tr", "en"];
-  return projeler.flatMap((proje) =>
-    diller.map((dil) => ({ params: { lang: dil, kimlik: proje.id } })),
-  );
+interface Props {
+  dil: Dil;
+  proje: CollectionEntry<"projeler">;
 }
 
-const { kimlik } = Astro.params;
-const dil = dilAl(Astro.url) as Dil;
+const { dil, proje } = Astro.props;
 const t = çeviriAl(dil);
-
-const proje = await getEntry("projeler", kimlik);
-
-if (!proje) {
-  return Astro.redirect(`/${dil}/projeler`);
-}
 
 const veri = proje.data;
 
@@ -52,7 +43,7 @@ const bağlıBaşarılar = veri.bağlıBaşarılar
   ogGörsel={veri.görseller?.find((g) => g.kapak)?.yol}
 >
   <div class="proje-detay">
-    <a href={`/${dil}/projeler`} class="geri-bağlantı"
+    <a href={bölümYolu(dil, "projeler")} class="geri-bağlantı"
       >{t.projeler.projelereDön}</a
     >
 

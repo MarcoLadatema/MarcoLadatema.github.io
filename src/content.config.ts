@@ -8,7 +8,7 @@ const çeviriMetni = z.object({
 });
 
 const projeler = defineCollection({
-  loader: glob({ pattern: "**/*.json", base: "./src/content/projects" }),
+  loader: glob({ pattern: "**/*.json", base: "./src/content/Projects" }),
   schema: z.object({
     tr: çeviriMetni,
     en: çeviriMetni,
@@ -46,7 +46,7 @@ const başarıçevirisi = z.object({
 });
 
 const başarılar = defineCollection({
-  loader: glob({ pattern: "**/*.json", base: "./src/content/achievements" }),
+  loader: glob({ pattern: "**/*.json", base: "./src/content/Achievements" }),
   schema: z.object({
     tr: başarıçevirisi,
     en: başarıçevirisi,
@@ -59,7 +59,7 @@ const başarılar = defineCollection({
 const blog = defineCollection({
   loader: glob({
     pattern: "**/*.md",
-    base: "./src/content/blog",
+    base: "./src/content/Blog",
     generateId: ({ entry }) => entry,
   }),
   schema: z.object({
@@ -68,11 +68,12 @@ const blog = defineCollection({
     açıklama: z.string(),
     etiketler: z.array(z.string()),
     dil: z.enum(["tr", "en"]),
+    slug: z.string(),
   }),
 });
 
 const sosyalMedya = defineCollection({
-  loader: glob({ pattern: "**/*.json", base: "./src/content/social-media" }),
+  loader: glob({ pattern: "**/*.json", base: "./src/content/SocialMedia" }),
   schema: z.object({
     platform: z.string(),
     kullanıcıAdı: z.string(),

@@ -4,7 +4,24 @@
   ============================================ 
 */
 
-@import url("https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600&family=Inter:wght@400;500&display=swap");
+/* #region Yerel Yazı Tipleri ve İkonlar */
+/* Harici CDN yerine paketten sunulur: sürüm sabit, gizlilik korunur, istek dış sunucuya gitmez. */
+/* Yalnızca latin ve latin-ext: Türkçe karakterler (ğ, ş, ı, İ) latin-ext içindedir.
+   Kiril, Yunan ve Vietnamca alt kümeleri dağıtıma dahil edilmez. */
+@import "@fontsource/outfit/latin-300.css";
+@import "@fontsource/outfit/latin-ext-300.css";
+@import "@fontsource/outfit/latin-400.css";
+@import "@fontsource/outfit/latin-ext-400.css";
+@import "@fontsource/outfit/latin-500.css";
+@import "@fontsource/outfit/latin-ext-500.css";
+@import "@fontsource/outfit/latin-600.css";
+@import "@fontsource/outfit/latin-ext-600.css";
+@import "@fontsource/inter/latin-400.css";
+@import "@fontsource/inter/latin-ext-400.css";
+@import "@fontsource/inter/latin-500.css";
+@import "@fontsource/inter/latin-ext-500.css";
+@import "@tabler/icons-webfont/dist/tabler-icons.min.css";
+/* #endregion */
 
 /* #region Tema Değişkenleri */
 

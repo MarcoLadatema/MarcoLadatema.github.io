@@ -1,0 +1,17 @@
+---
+// Sayfa boyanmadan ÖNCE çalışması gereken görünüm ayarları.
+// is:inline zorunlu: Astro bu betiği paketlemez, doğrudan head içine yazar.
+// Paketlenirse geç çalışır ve kullanıcı bir an yanlış temayı görür (FOUC).
+---
+
+<script is:inline>
+  const tema = localStorage.getItem("tema") ?? "otomatik";
+  const koyuMu =
+    tema === "koyu" ||
+    (tema === "otomatik" &&
+      window.matchMedia("(prefers-color-scheme: dark)").matches);
+  document.documentElement.setAttribute("data-tema", koyuMu ? "koyu" : "açık");
+
+  const yazıBoyutu = localStorage.getItem("yazıBoyutu") ?? "1";
+  document.documentElement.style.fontSize = Number(yazıBoyutu) * 100 + "%";
+</script>

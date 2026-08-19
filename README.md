@@ -1,43 +1,60 @@
-# Astro Starter Kit: Minimal
+# Marco La'datema — Kişisel Site
 
-```sh
-npm create astro@latest -- --template minimal
+[marcoladatema.com](https://marcoladatema.com) adresinde yayınlanan iki dilli (Türkçe / İngilizce) kişisel site ve oyun rehberleri.
+
+Astro ile üretilir, GitHub Pages üzerinde barındırılır. `main` dalına yapılan her push GitHub Actions ile otomatik olarak yayınlanır.
+
+## Kurulum
+
+```bash
+npm install
 ```
 
-> 🧑‍🚀 **Seasoned astronaut?** Delete this file. Have fun!
+Node 22.12 veya üstü gerekir.
 
-## 🚀 Project Structure
+## Komutlar
 
-Inside of your Astro project, you'll see the following folders and files:
+| Komut | İş |
+| --- | --- |
+| `npm run dev` | Geliştirme sunucusunu başlatır |
+| `npm run build` | Üretim derlemesini `dist/` içine üretir |
+| `npm run preview` | Derlenmiş çıktıyı yerelde önizler |
 
-```text
-/
-├── public/
-├── src/
-│   └── pages/
-│       └── index.astro
-└── package.json
+Push öncesi `npm run build` çalıştırılması önerilir: site tek bir derlemeden çıktığı için içerik şemasına takılan bir kayıt tüm yayını durdurur.
+
+## Yapı
+
+```
+src/
+├── components/       Astro bileşenleri
+│   └── Sections/     Sayfa bölümlerinin gövdeleri
+├── content/          İçerik verisi (JSON, Markdown) ve Zod şemaları
+├── i18n/             Çeviriler, çeviri yardımcıları ve adres haritası
+├── layouts/          Sayfa düzenleri
+├── pages/[dil]/      Dile göre yönlendirilen sayfalar
+└── styles/           CSS
 ```
 
-Astro looks for `.astro` or `.md` files in the `src/pages/` directory. Each page is exposed as a route based on its file name.
+Adresler dil önekiyle başlar: `/tr/...` ve `/en/...`. Varsayılan dil Türkçe olup o da önek alır, böylece hiçbir sayfanın iki farklı adresi olmaz.
 
-There's nothing special about `src/components/`, but that's where we like to put any Astro/React/Vue/Svelte/Preact components.
+Bölüm adresleri her dilde kendi dilindedir (`/tr/iletişim`, `/en/contact`) ve tek bir kaynaktan üretilir: `src/i18n/adresHaritası.ts`. Dosya adı sabit olduğu için tek bir sayfa dosyası iki farklı adres üretemez; bu yüzden sayfalar dinamiktir (`[dil]/[sayfa].astro`) ve somut adresleri haritadan alır. Dil değiştirme ve `hreflang` etiketleri de aynı haritadan geçer.
 
-Any static assets, like images, can be placed in the `public/` directory.
+İçerik koda gömülmez; `src/content/` altında veri dosyalarında yaşar ve her koleksiyon derleme zamanında Zod şemasıyla doğrulanır.
 
-## 🧞 Commands
+## Belgeler
 
-All commands are run from the root of the project, from a terminal:
+| Belge | İçerik |
+| --- | --- |
+| `Documentation/Decisions/ProjeKararları.md` | Oyun rehberi projesinin kuruluş kararları ve gerekçeleri |
+| `Documentation/Decisions/LisansPolitikası.md` | Fan içerik lisans çerçevesi ve bağlayıcı kurallar |
+| `Documentation/Roadmap/YolHaritası.md` | Faz planı ve tamamlanma koşulları |
 
-| Command                   | Action                                           |
-| :------------------------ | :----------------------------------------------- |
-| `npm install`             | Installs dependencies                            |
-| `npm run dev`             | Starts local dev server at `localhost:4321`      |
-| `npm run build`           | Build your production site to `./dist/`          |
-| `npm run preview`         | Preview your build locally, before deploying     |
-| `npm run astro ...`       | Run CLI commands like `astro add`, `astro check` |
-| `npm run astro -- --help` | Get help using the Astro CLI                     |
+Kod standardı `C:\MarcoLadatema\Standards\GeliştiriciStandardı.md` dosyasındadır ve tüm projelerde geçerlidir.
 
-## 👀 Want to learn more?
+## Yazı tipleri ve ikonlar
 
-Feel free to check [our documentation](https://docs.astro.build) or jump into our [Discord server](https://astro.build/chat).
+Outfit, Inter ve Tabler Icons harici bir CDN'den değil, npm paketlerinden yerel olarak sunulur. Bu, sürümü sabitler ve ziyaretçinin isteğinin üçüncü taraf sunuculara gitmesini önler.
+
+## Lisans
+
+Site içeriği ve kodu kişiseldir. Oyun rehberi bölümleri, Wizards of the Coast ve Larian Studios fan içerik politikalarına tabi olan ticari olmayan fan içeriğidir; ayrıntılar `Documentation/Decisions/LisansPolitikası.md` içindedir.

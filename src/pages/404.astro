@@ -1,7 +1,8 @@
 ---
 import "../styles/genel.css";
 import "../styles/hata404.css";
-import { çeviriAl } from "../i18n/utils";
+import { çeviriAl } from "../i18n/çeviriAraçları";
+import TemaBaşlatıcı from "../components/TemaBaşlatıcı.astro";
 import YükleniyorAnimasyon from "../components/YükleniyorAnimasyon.astro";
 
 const tr = çeviriAl("tr");
@@ -15,21 +16,7 @@ const en = çeviriAl("en");
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>404 — Marco La'datema</title>
     <link rel="icon" href="/favicon.ico" />
-    <script is:inline>
-      const tema = localStorage.getItem("tema") ?? "otomatik";
-      const koyuMu =
-        tema === "koyu" ||
-        (tema === "otomatik" &&
-          window.matchMedia("(prefers-color-scheme: dark)").matches);
-      document.documentElement.setAttribute(
-        "data-tema",
-        koyuMu ? "koyu" : "açık",
-      );
-    </script>
-    <link
-      rel="stylesheet"
-      href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css"
-    />
+    <TemaBaşlatıcı />
   </head>
   <body>
     <YükleniyorAnimasyon />
@@ -55,16 +42,6 @@ const en = çeviriAl("en");
 </html>
 
 <script>
-  const kayıtlıTema = localStorage.getItem("tema") ?? "otomatik";
-  const temaUygula = (seçim: string) => {
-    const koyu =
-      seçim === "koyu" ||
-      (seçim === "otomatik" &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches);
-    document.documentElement.setAttribute("data-tema", koyu ? "koyu" : "açık");
-  };
-  temaUygula(kayıtlıTema);
-
   const sayfaVeri = document.querySelector<HTMLElement>(".hata-sayfa");
 
   function dilUygula(dil: "tr" | "en") {

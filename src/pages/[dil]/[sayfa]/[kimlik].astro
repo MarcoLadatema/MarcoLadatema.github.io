@@ -1,0 +1,41 @@
+---
+import { getCollection } from "astro:content";
+import type { Dil } from "../../../i18n/çeviriAraçları";
+import { bölümSlugu } from "../../../i18n/adresHaritası";
+import ProjeDetayı from "../../../components/Sections/ProjeDetayı.astro";
+import BlogYazısı from "../../../components/Sections/BlogYazısı.astro";
+
+export async function getStaticPaths() {
+  const diller: Dil[] = ["tr", "en"];
+
+  const projeler = await getCollection("projeler");
+  const projeYolları = diller.flatMap((dil) =>
+    projeler.map((proje) => ({
+      params: { dil, sayfa: bölümSlugu(dil, "projeler"), kimlik: proje.id },
+      props: { dil, tür: "proje" as const, proje },
+    })),
+  );
+
+  const yazılar = await getCollection("blog");
+  const yazıYolları = yazılar.map((yazı) => ({
+    params: {
+      dil: yazı.data.dil,
+      sayfa: bölümSlugu(yazı.data.dil, "blog"),
+      kimlik: yazı.data.slug,
+    },
+    props: { dil: yazı.data.dil, tür: "yazı" as const, yazı },
+  }));
+
+  return [...projeYolları, ...yazıYolları];
+}
+
+const detay = Astro.props;
+---
+
+{
+  detay.tür === "proje" ? (
+    <ProjeDetayı dil={detay.dil} proje={detay.proje} />
+  ) : (
+    <BlogYazısı dil={detay.dil} yazı={detay.yazı} />
+  )
+}

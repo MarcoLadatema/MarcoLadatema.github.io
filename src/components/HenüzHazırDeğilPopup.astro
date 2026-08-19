@@ -1,5 +1,5 @@
 ---
-import { çeviriAl, type Dil } from "../i18n/utils";
+import { çeviriAl, type Dil } from "../i18n/çeviriAraçları";
 
 interface Props {
   dil: Dil;
@@ -10,19 +10,24 @@ const t = çeviriAl(dil);
 ---
 
 <div
-  id="henuz-hazır-popup-kaplama"
+  id="henüz-hazır-değil-kaplama"
   class="popup-kaplama gizli"
-  data-baslik={t.henüzHazırDeğil.başlık}
-  data-aciklama={t.henüzHazırDeğil.açıklama}
-  data-kapat={t.henüzHazırDeğil.kapat}
+  role="dialog"
+  aria-modal="true"
+  aria-labelledby="henüz-hazır-değil-başlık"
+  aria-describedby="henüz-hazır-değil-açıklama"
 >
   <div class="popup-kutu">
     <div class="popup-ikon-alani">
       <i class="ti ti-clock-pause" aria-hidden="true"></i>
     </div>
-    <h2 class="popup-baslik">{t.henüzHazırDeğil.başlık}</h2>
-    <p class="popup-aciklama">{t.henüzHazırDeğil.açıklama}</p>
-    <button id="henuz-hazır-kapat" class="popup-kapat-buton">
+    <h2 class="popup-baslik" id="henüz-hazır-değil-başlık">
+      {t.henüzHazırDeğil.başlık}
+    </h2>
+    <p class="popup-aciklama" id="henüz-hazır-değil-açıklama">
+      {t.henüzHazırDeğil.açıklama}
+    </p>
+    <button id="henüz-hazır-değil-kapat" class="popup-kapat-buton">
       {t.henüzHazırDeğil.kapat}
     </button>
   </div>
@@ -109,15 +114,28 @@ const t = çeviriAl(dil);
 </style>
 
 <script>
-  const kaplama = document.getElementById("henuz-hazır-popup-kaplama");
-  const kapatButon = document.getElementById("henuz-hazır-kapat");
+  const kaplama = document.getElementById("henüz-hazır-değil-kaplama");
+  const kapatButon = document.getElementById("henüz-hazır-değil-kapat");
+
+  // Popup kapanınca odak, açan öğeye geri döner — klavye kullanıcısı yerini kaybetmez.
+  let öncekiOdak: HTMLElement | null = null;
+
+  function açıkMı() {
+    return kaplama !== null && !kaplama.classList.contains("gizli");
+  }
 
   function henüzHazırDeğilGöster() {
-    if (kaplama) kaplama.classList.remove("gizli");
+    if (!kaplama) return;
+    öncekiOdak = document.activeElement as HTMLElement | null;
+    kaplama.classList.remove("gizli");
+    kapatButon?.focus();
   }
 
   function henüzHazırDeğilGizle() {
-    if (kaplama) kaplama.classList.add("gizli");
+    if (!kaplama) return;
+    kaplama.classList.add("gizli");
+    öncekiOdak?.focus();
+    öncekiOdak = null;
   }
 
   kapatButon?.addEventListener("click", henüzHazırDeğilGizle);
@@ -127,8 +145,19 @@ const t = çeviriAl(dil);
   });
 
   document.addEventListener("keydown", (olay) => {
-    if (olay.key === "Escape") henüzHazırDeğilGizle();
+    if (!açıkMı()) return;
+
+    if (olay.key === "Escape") {
+      henüzHazırDeğilGizle();
+      return;
+    }
+
+    // Tek odaklanabilir öğe kapat butonu; Tab odağı arkadaki sayfaya kaçırmaz.
+    if (olay.key === "Tab") {
+      olay.preventDefault();
+      kapatButon?.focus();
+    }
   });
 
-  (window as any).henüzHazırDeğilGöster = henüzHazırDeğilGöster;
+  document.addEventListener("henüz-hazır-değil", henüzHazırDeğilGöster);
 </script>

@@ -1,22 +1,16 @@
 ---
-import TemelDüzen from "../../../layouts/TemelDüzen.astro";
-import "../../../styles/blog.css";
-import { getCollection, render } from "astro:content";
-import { çeviriAl, dilAl, type Dil } from "../../../i18n/utils";
+import TemelDüzen from "../../layouts/TemelDüzen.astro";
+import "../../styles/blog.css";
+import { render, type CollectionEntry } from "astro:content";
+import { çeviriAl, type Dil } from "../../i18n/çeviriAraçları";
+import { bölümYolu } from "../../i18n/adresHaritası";
 
-export async function getStaticPaths() {
-  const yazılar = await getCollection("blog");
-  return yazılar.map((yazı) => ({
-    params: {
-      lang: yazı.data.dil,
-      kimlik: yazı.id.replace(`.${yazı.data.dil}.md`, ""),
-    },
-    props: { yazı },
-  }));
+interface Props {
+  dil: Dil;
+  yazı: CollectionEntry<"blog">;
 }
 
-const { yazı } = Astro.props;
-const dil = dilAl(Astro.url) as Dil;
+const { dil, yazı } = Astro.props;
 const t = çeviriAl(dil);
 
 const { Content } = await render(yazı);
@@ -26,7 +20,9 @@ const tarihDili = dil === "tr" ? "tr-TR" : "en-US";
 
 <TemelDüzen başlık={veri.başlık} dil={dil} açıklama={veri.açıklama}>
   <div class="blog-yazı">
-    <a href={`/${dil}/blog`} class="geri-bağlantı">{t.blog["blogaDön"]}</a>
+    <a href={bölümYolu(dil, "blog")} class="geri-bağlantı">
+      {t.blog["blogaDön"]}
+    </a>
 
     <div class="blog-yazı-üst">
       <div class="blog-yazı-tarih">

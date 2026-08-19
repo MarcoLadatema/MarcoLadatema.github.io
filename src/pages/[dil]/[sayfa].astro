@@ -1,0 +1,42 @@
+---
+import type { Dil } from "../../i18n/çeviriAraçları";
+import {
+  bölümAnahtarları,
+  bölümSlugu,
+  type BölümAnahtarı,
+} from "../../i18n/adresHaritası";
+import ProjelerBölümü from "../../components/Sections/ProjelerBölümü.astro";
+import BaşarılarBölümü from "../../components/Sections/BaşarılarBölümü.astro";
+import BlogBölümü from "../../components/Sections/BlogBölümü.astro";
+import SosyalMedyaBölümü from "../../components/Sections/SosyalMedyaBölümü.astro";
+import İletişimBölümü from "../../components/Sections/İletişimBölümü.astro";
+
+export function getStaticPaths() {
+  const diller: Dil[] = ["tr", "en"];
+  return diller.flatMap((dil) =>
+    bölümAnahtarları().map((anahtar) => ({
+      params: { dil, sayfa: bölümSlugu(dil, anahtar) },
+      props: { dil, anahtar },
+    })),
+  );
+}
+
+interface Props {
+  dil: Dil;
+  anahtar: BölümAnahtarı;
+}
+
+const { dil, anahtar } = Astro.props;
+
+const bölümBileşenleri = {
+  projeler: ProjelerBölümü,
+  başarılar: BaşarılarBölümü,
+  blog: BlogBölümü,
+  sosyalMedya: SosyalMedyaBölümü,
+  iletişim: İletişimBölümü,
+};
+
+const Bölüm = bölümBileşenleri[anahtar];
+---
+
+<Bölüm dil={dil} />
