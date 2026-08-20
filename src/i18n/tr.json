@@ -23,9 +23,8 @@
 
   "anaSayfa": {
     "slogan1": "Hayallerimi sisteme,",
-    "slogan2": "sistemleri",
+    "slogan2": "sistemleri {vurgu} dönüştürüyorum.",
     "sloganVurgu": "oyuna",
-    "slogan3": "dönüştürüyorum.",
     "altBaşlık": "Geliştirici. Yapıcı. Oyuncu.",
     "hakkımda": "Hakkımda",
     "hakkımdaMetin1": "Çocukluğumdan beri zihnimde oyunlar, sistemler ve fikirler vardı. Orta okul ve lisede oyunlara modlar yapmaya çalışırken bir şeyi fark ettim: üretmek, oynamaktan daha keyifli.",

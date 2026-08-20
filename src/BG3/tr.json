@@ -1,0 +1,31 @@
+{
+  "liste": {
+    "başlık": "Oyun Rehberleri",
+    "açıklama": "Oynadığım oyunlar için hazırladığım ayrıntılı rehberler."
+  },
+  "durum": {
+    "hazırlanıyor": "Hazırlanıyor",
+    "yayında": "Yayında"
+  },
+  "bg3": {
+    "başlık": "Baldur's Gate 3 Rehberi",
+    "giriş": "Bu rehber oyunun sınıflarını, büyülerini, eşyalarını ve kalıcı güçlendirmelerini tek yerde toplar. Mekanik veri oyunun kendi dosyalarından üretilir; metinler oyunun resmî terminolojisini kullanır.",
+    "hazırlanıyorBaşlık": "Rehber hazırlanıyor",
+    "hazırlanıyorMetin": "Şu an yalnızca iskelet kurulu. İçerik bölümleri sırayla yayına alınacak.",
+    "sürüm": "Baz sürüm: Patch 8 / Hotfix #36"
+  },
+  "lisans": {
+    "özet": "Resmî olmayan hayran içeriği. Baldur's Gate 3 Larian Studios'a, D&D içeriği Wizards of the Coast'a aittir.",
+    "bağlantı": "Lisans",
+    "sayfaBaşlık": "Lisans",
+    "sayfaGiriş": "Bu rehber bir hayran çalışmasıdır ve üç ayrı politikaya birden tabidir. Aşağıdaki bildirimler her rehber sayfasının alt bilgisinde özet olarak tekrarlanır.",
+    "wotcBaşlık": "Wizards of the Coast — Fan Content Policy",
+    "özgünKalıpBaşlık": "Politikanın yayımladığı özgün metin",
+    "larianBaşlık": "Larian Studios — BG3 Fan Content Terms",
+    "larianBildirim": "Baldur's Gate 3, Larian Studios'a aittir. Bu site resmî değildir; Larian Studios veya Wizards of the Coast tarafından onaylanmamıştır.",
+    "ticariBaşlık": "Ticari olmayan kullanım",
+    "ticariMetin": "Rehber ücretsizdir. Reklam, sponsorluk, bağış bağlantısı veya ücretli katman içermez.",
+    "kaynakBaşlık": "Oyun içeriği",
+    "kaynakMetin": "Mekanik veri ve ikonlar oyunun kendi dosyalarından çıkarılır ve hayran içeriği olarak kullanılır. İkonlardaki telif izleri değiştirilmez. Metinler bize aittir; başka hayran kaynaklarından birebir kopyalanmaz."
+  }
+}

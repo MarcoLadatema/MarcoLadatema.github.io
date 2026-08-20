@@ -1,0 +1,39 @@
+---
+import type { Dil } from "../../../i18n/çeviriAraçları";
+import {
+  rehberYolları,
+  type RehberKonumu,
+} from "../../../BG3/adresHaritası";
+import RehberListesi from "../../../BG3/Components/RehberListesi.astro";
+import RehberAnaSayfası from "../../../BG3/Components/RehberAnaSayfası.astro";
+import LisansSayfası from "../../../BG3/Components/LisansSayfası.astro";
+
+/**
+ * Rehberin TEK rota dosyası (karar 21). Yakalayıcı parametre, liste
+ * sayfasından en derin kayda kadar bütün rehber adreslerini üretir; bu dosya
+ * yalnızca yolu bileşene bağlar, gövde `src/BG3/` altındadır.
+ */
+
+export function getStaticPaths() {
+  return rehberYolları();
+}
+
+interface Props {
+  dil: Dil;
+  konum: RehberKonumu;
+}
+
+const { dil, konum } = Astro.props;
+---
+
+{konum.tür === "liste" && <RehberListesi dil={dil} />}
+{
+  konum.tür === "rehberAna" && (
+    <RehberAnaSayfası dil={dil} kimlik={konum.kimlik} />
+  )
+}
+{
+  konum.tür === "rehberLisansı" && (
+    <LisansSayfası dil={dil} kimlik={konum.kimlik} />
+  )
+}

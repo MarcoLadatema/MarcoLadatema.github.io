@@ -1,0 +1,44 @@
+---
+import { getCollection } from "astro:content";
+import type { Dil } from "../../i18n/çeviriAraçları";
+import { rehberAnaYolu } from "../adresHaritası";
+import { rehberÇevirisi } from "../çeviri";
+import RehberDüzeni from "./RehberDüzeni.astro";
+
+interface Props {
+  dil: Dil;
+}
+
+const { dil } = Astro.props;
+const r = rehberÇevirisi(dil);
+
+const rehberler = await getCollection("rehberler");
+const sıralıRehberler = rehberler.sort((a, b) => a.data.sıra - b.data.sıra);
+---
+
+<RehberDüzeni
+  başlık={r.liste.başlık}
+  dil={dil}
+  konum={{ tür: "liste" }}
+  açıklama={r.liste.açıklama}
+>
+  <h1>{r.liste.başlık}</h1>
+  <p class="rehber-giriş">{r.liste.açıklama}</p>
+
+  <div class="rehber-kart-listesi">
+    {
+      sıralıRehberler.map((rehber) => (
+        <a class="rehber-kartı" href={rehberAnaYolu(dil, rehber.id)}>
+          <i class={`ti ${rehber.data.ikon}`} aria-hidden="true" />
+          <div class="rehber-kartı-gövde">
+            <h2>{rehber.data[dil].ad}</h2>
+            <p>{rehber.data[dil].açıklama}</p>
+          </div>
+          <span class="rehber-durumu" data-durum={rehber.data.durum}>
+            {r.durum[rehber.data.durum]}
+          </span>
+        </a>
+      ))
+    }
+  </div>
+</RehberDüzeni>

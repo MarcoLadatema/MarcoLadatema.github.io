@@ -31,6 +31,12 @@ Bu belgenin amacı, ileride "bunu neden böyle seçmiştik" sorusunun cevapsız 
 | 17  | TypeScript fonksiyon | `camelCase`                                                                          |
 | 18  | Parantez stili       | Web tarafında K&R                                                                    |
 | 19  | Klasör adlandırma    | `PascalCase` + framework istisnası                                                   |
+| 20  | Rehber adresleri     | Kendi haritasında; düzen dışarıdan karşılık bilgisi kabul eder                       |
+| 21  | Rehber yönlendirmesi | Tek yakalayıcı rota dosyası                                                          |
+| 22  | Rehber üst adresi    | `/tr/oyun-rehberleri` liste sayfası gösterir                                          |
+| 23  | Rehber yerleşimi     | Kendi kök klasörü `src/BG3/`                                                         |
+| 24  | Ana siteden bağlantı | Gezinti menüsünde, tek kapı dosyası üzerinden                                        |
+| 25  | Lisans bildirimi     | Alt bilgide sayfanın dilinde özet, tam metin ayrı lisans sayfasında                  |
 
 ---
 
@@ -56,10 +62,12 @@ Bu belgenin amacı, ileride "bunu neden böyle seçmiştik" sorusunun cevapsız 
 
 **Ayrılabilirlik kuralı:** Bağımlılık tek yönlüdür — **rehber ana siteye bağımlı olabilir, ana site rehbere ASLA bağımlı olmaz.** Bu kural, ileride ayrılma ihtiyacı doğarsa taşımayı mekanik bir işe indirger:
 
-- Rehber dosyaları tek ad altında toplanır: `src/content/BG3/`, `src/components/BG3/`, `src/pages/[lang]/oyun-rehberleri/`, `src/styles/bg3/`
+- Rehberin kendi kök klasörü vardır ve kod dosyalarının tamamı orada toplanır (karar 23)
+- Ortak klasörlerde yalnızca kaçınılmaz iki iz bulunur: içerik klasörü ve tek rota dosyası
 - `content.config.ts` rehber şemalarını **içine yazmaz**, ayrı bir dosyadan `import` eder — ayırma anında silinecek şey tek bir satır olmalıdır
-- Rehber çevirileri ana `tr.json` / `en.json` dosyalarına karışmaz, ayrı dosyada durur
-- Hiçbir rehber dosyası ortak klasörlere dağılmaz
+- Rehber çevirileri ve adres haritası ana dosyalara karışmaz (karar 20)
+
+Klasör yerleşiminin ayrıntısı ve gerekçesi karar 23'tedir; bu maddeler yalnızca ilkeyi belirtir.
 
 **Bedeli:** İki projenin yaşam döngüsü ortaklaşır. Rehberdeki bir şema hatası derlemeyi kırarsa biyografi sitesinin yayını da durur. Bu bilinçli olarak kabul edildi; karşılığı, push öncesi `npm run build` çalıştırma zorunluluğudur. Ayrıca ~2600 ikon ve 2000+ sayfa deponun boyutunu ve geliştirme sunucusunun hızını etkileyecek.
 
@@ -253,6 +261,99 @@ Bu belgenin amacı, ileride "bunu neden böyle seçmiştik" sorusunun cevapsız 
 **Karar:** Bizim açtığımız tüm klasörler İngilizce `PascalCase` olur. Framework'ün adını dayattığı klasörler (`src/pages`, `src/content`, `src/layouts`, `src/components`, `public`, `node_modules`) olduğu gibi bırakılır.
 
 **Gerekçe:** Astro bu klasör adlarını sözleşme olarak bekler; `src/Pages/` yazılırsa sayfalar bulunamaz. Bu klasörler bizim adlandırmamız değildir. Kural yalnızca bize ait klasörlere uygulanır: `src/content/Items/` `PascalCase` olur, onu içeren `src/content` dokunulmaz.
+
+---
+
+## 20. Rehber adresleri: kendi haritasında, düzen dışarıdan bilgi kabul eder
+
+**Karar:** Rehberin adres segmentleri ana `src/i18n/adresHaritası.ts` dosyasına **girmez**; rehber kendi harita dosyasını taşır. `TemelDüzen` ve `Gezinti`, "bu sayfanın diğer dildeki karşılığı" bilgisini isteğe bağlı bir prop olarak kabul eder; prop verilmezse bugünkü gibi ana haritadan hesaplar.
+
+**Gerekçe:** Ana site rehberin varlığını hiç bilmemelidir (karar 2, ayrılabilirlik kuralı). Rehber ana haritaya girerse ayırma anında silinecek şey "tek bir `import` satırı" olmaktan çıkar ve ana harita rehbere özgü bir bölüm türü taşımaya başlar.
+
+Eklenen prop rehbere özgü değildir ve bu yüzden ana siteyi kirletmez: düzenin bugünkü gizli varsayımı olan *"her sayfa bir ana site bölümüdür"* zaten yanlıştı. Prop, o varsayımı kaldırır.
+
+**Bedeli:** İki adres haritası bir arada yaşar; `TemelDüzen` ve `Gezinti` birer isteğe bağlı prop kazanır.
+
+**Reddedilen:** _Ana haritaya `oyunRehberleri` anahtarı eklemek._ Dil değiştirme ve `hreflang` hiçbir değişiklik olmadan çalışırdı, ama haritada olup dağıtıcıda karşılığı olmayan bir bölüm türü doğardı — bu da haritaya "bu bölümü kim karşılıyor" ayrımı eklemeyi gerektirirdi.
+
+---
+
+## 21. Rehber yönlendirmesi: tek yakalayıcı rota dosyası
+
+**Karar:** Rehberin tüm adresleri `src/pages/[dil]/[rehberler]/[...yol].astro` dosyasından üretilir. Sayfa gövdeleri rehberin kendi bileşen klasöründe yaşar; rota dosyası yalnızca yolu bileşene bağlar.
+
+**Gerekçe:** Rehberin adresleri 2 ile 6 parça arasında değişiyor (`/tr/oyun-rehberleri` ile `/tr/oyun-rehberleri/bg3/sınıflar/paladin/...` arası). Astro'da dosya yolu adres parça sayısını sabitler; bunun tek istisnası yakalayıcı parametredir. Yakalayıcı, boş değerle üst adresi de ürettiği için liste sayfasından en derin kayda kadar her şey tek dosyadan çıkar.
+
+`src/pages` ortak bir klasördür ve rehber dosyaları oraya girmek zorundadır — ayrılabilirlik kuralının "tek ad altında toplanma" şartı orada uygulanamaz. Tek yakalayıcı, ortak klasöre bırakılan izi **bir dosyaya** indirir. Ayrıca ana sitenin `[sayfa].astro` dağıtıcısıyla aynı desendir; iki taraf tutarlı kalır.
+
+**Bedeli:** Adres yapısı dosya ağacından okunmaz, rota dosyasındaki eşlemeden anlaşılır.
+
+**Doğrulandı:** Yakalayıcı rotanın ana sitenin `[sayfa].astro` ve `[sayfa]/[kimlik].astro` dosyalarıyla çakışmadığı, istenen derinliğe indiği ve boş değerle üst adresi ürettiği derleme testiyle sınandı.
+
+**Reddedilen:** _Seviye seviye ayrı rota dosyaları._ Adres yapısı dosya ağacından okunurdu, ama ortak klasöre 4–5 dosya bırakırdı ve alt sınıflar için altıncı seviye gerektiğinde yeni dosya açılması gerekirdi.
+
+---
+
+## 22. Rehber üst adresi: liste sayfası
+
+**Karar:** `/tr/oyun-rehberleri` ve `/en/game-guides` adresleri bir rehber listesi sayfası gösterir. Şimdilik tek kart (BG3) taşır.
+
+**Gerekçe:** Adres yapısı bu üst seviyeyi zaten doğuruyor. Boş bırakılırsa adresi kırpıp yukarı çıkan ziyaretçi 404 görür, üstelik "yönlendirme eklenmez" kararı gereği onu rehbere yönlendirmek de seçenek değil. İkinci bir oyun rehberi eklenirse doğal yeri hazır olur.
+
+**Bedeli:** Tek öğeli bir liste sayfası şimdilik fazladan bir tıklama.
+
+---
+
+## 23. Rehber yerleşimi: kendi kök klasörü `src/BG3/`
+
+**Karar:** Rehberin şeması, adres haritası, çevirileri, bileşenleri ve stilleri `src/BG3/` altında toplanır. Ortak klasörlerde yalnızca **kaçınılmaz iki iz** kalır:
+
+- `src/content/BG3/` — içerik koleksiyonları `src/content/` altında olmak zorundadır
+- `src/pages/[dil]/[rehberler]/[...yol].astro` — tek rota dosyası (karar 21)
+
+**Gerekçe:** Ayrılabilirlik kuralı (karar 2) "hiçbir rehber dosyası ortak klasörlere dağılmaz" diyor. `src/components/`, `src/styles/` ve `src/i18n/` ekosistem konvansiyonudur ama **framework şartı değildir** — Astro yalnızca `src/pages` ve `src/content` adlarını dayatır, diğerlerini biz seçtik. Konvansiyon ile bağlayıcı bir proje kuralı çakıştığında kural kazanır.
+
+Sonuç ölçülebilir: ayırma işlemi iki klasör ve bir dosya silmeye iner, başka hiçbir yere bakılmaz.
+
+**Bedeli:** Rehber bileşenleri `src/components/` altında değildir; bu klasörlere alışkın biri için sürprizdir. Bu yüzden `CLAUDE.md`'de açıkça belirtilir.
+
+**Klasör adı:** `BG3` — standart §13'ün İngilizce `PascalCase` kuralına uyar.
+
+---
+
+## 24. Ana siteden bağlantı: gezinti menüsünde, tek kapı dosyası üzerinden
+
+**Karar:** Ana site rehbere gezinti menüsünden bağlanır. Bağlantı `src/BG3/anaSiteBağlantısı.ts` dosyasından geçer; bu dosya rehberin **adını ve adresini birlikte** döndürür ve ana sitede yalnızca `Gezinti.astro` onu tanır. Hedef, BG3 değil liste sayfasıdır (karar 22).
+
+**Gerekçe:** Bağlantı maddesi kaçınılmaz olarak ana sitede rehberin adresini bilen bir nokta yaratır. Kapı dosyası o noktayı tek satıra indirir: menü maddesinin metni de ana `tr.json`/`en.json` dosyalarına girmez, rehberin kendi çevirisinden gelir. Böylece ayırma anında ana sitede geriye artık çeviri anahtarı kalmaz.
+
+Gezinti seçildi çünkü rehber, ana sayfanın bir alt bölümü değil kendi başına bir bölümdür; alt bilgiye konsaydı ana sitenin HER sayfası rehbere bağımlı hale gelirdi.
+
+**Bedeli — ölçülen ve kapatılan:** Menü yedinci maddeyi kaldıramıyordu. Türkçe menünün gerçek ihtiyacı metin boyutuyla büyüyor (0.85× → 813 px, 1× → 946 px, 1.15× → 1078 px), oysa mobil menüye geçiş tek bir 900 px eşiğine bağlıydı. Rehber maddesi eklendiğinde 1.15× boyutta 900–1078 px arası pencerelerde sayfa 82 px yatay taşıyordu.
+
+Çözüm: eşik metin boyutuna bağlandı. Boyut seçici oranı `<html>` üzerine `data-boyut` olarak yazar, `gezinti.css` her oran için ayrı eşik kullanır (830 / 960 / 1090 px). Medya sorguları kök yazı boyutunu görmediği ve sorgudaki `rem` bile tarayıcı varsayılanına göre çözüldüğü için bu bilginin CSS'e öznitelikle taşınması zorunludur. Oran yazılmadan önce normal boyutun eşiği geçerlidir.
+
+**Reddedilen:** _Eşiği tek seferde 1020 px'e çekmek._ Tek satırlık düzeltme olurdu ama 900–1020 px arasındaki normal boyutlu ziyaretçi, menü rahatça sığarken hamburger görürdü.
+
+**Reddedilen:** _Menü metnini `tr.json`/`en.json` dosyalarına eklemek._ Kapı dosyasına gerek kalmazdı, ama ayırma sonrasında ana sitenin çeviri dosyalarında sahipsiz anahtarlar kalırdı.
+
+---
+
+## 25. Lisans bildirimi: alt bilgide özet, tam metin ayrı sayfada
+
+**Karar:** Rehber sayfalarının alt bilgisinde **sayfanın dilinde** tek cümlelik bir özet ve lisans sayfasına bağlantı bulunur. Kalıbın tam metni `/tr/oyun-rehberleri/bg3/lisans` ve `/en/game-guides/bg3/license` adreslerinde durur; Türkçe sayfada özgün İngilizce kalıp ayrıca açılır bir blokta gösterilir. Rehber liste sayfasında bildirim **yoktur**.
+
+**Gerekçe:** Önceki düzenleme her rehber sayfasının altına iki paragraf koyuyordu ve Türkçe sayfada İngilizce kalıp ile Türkçe cümle yan yana duruyordu. Site tek dilde okunmalı; iki dilin aynı anda görünmesi hem yer kaplıyor hem de sayfanın dil tercihini boşa çıkarıyordu.
+
+Politikanın resmî metni 20 Ağustos 2026'da doğrulandı: kalıbı verirken **dil ve yerleşim konusunda hiçbir şart koymuyor**, yalnızca _"Please include a note with your Fan Content"_ diyor. Çeviri yasak değil, her sayfada tam metin de zorunlu değil. Bu iki boşluk düzenlemeyi mümkün kıldı.
+
+Aynı doğrulamada `LisansPolitikası.md`'ye kayıtlı kalıbın güncel resmî metinle uyuşmadığı görüldü — "under the **Wizards of the Coast** Fan Content Policy" yazıyordu ve `©Wizards of the Coast LLC` kısmı eksikti. Kalıp düzeltildi.
+
+**Liste sayfasında bildirim bulunmaz** çünkü orası hangi rehberlerin bulunduğunu söylemekten başka bir şey yapmaz; WotC veya Larian materyali göstermez.
+
+**Bedeli:** Rehber bir sayfa daha taşır ve tam metin artık bir tık uzakta. Lisans metinleri arayüz çevirilerinden ayrı bir dosyada (`src/BG3/lisans.ts`) tutulur — hukuki metin ile arayüz kopyası aynı yerde durmaz.
+
+**Doğrulanamayan:** Larian'ın fan içerik sayfası otomatik erişime 403 döndürüyor; katman 2 belgedeki kayıtlı özetiyle uygulanıyor.
 
 ---
 

@@ -1,6 +1,9 @@
 import { defineCollection } from "astro:content";
 import { z } from "astro/zod";
 import { glob } from "astro/loaders";
+// Rehberin şemaları burada tanımlanmaz; ayırma anında silinecek tek iz
+// aşağıdaki import ile koleksiyon listesindeki yayılım olmalıdır (karar 23).
+import { rehberKoleksiyonları } from "./BG3/şema";
 
 const çeviriMetni = z.object({
   ad: z.string(),
@@ -86,4 +89,10 @@ const sosyalMedya = defineCollection({
   }),
 });
 
-export const collections = { projeler, başarılar, blog, sosyalMedya };
+export const collections = {
+  projeler,
+  başarılar,
+  blog,
+  sosyalMedya,
+  ...rehberKoleksiyonları,
+};

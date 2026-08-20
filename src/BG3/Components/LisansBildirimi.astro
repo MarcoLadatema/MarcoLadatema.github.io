@@ -1,0 +1,31 @@
+---
+import type { Dil } from "../../i18n/çeviriAraçları";
+import { rehberLisansYolu, type RehberKonumu } from "../adresHaritası";
+import { rehberÇevirisi } from "../çeviri";
+
+/**
+ * Alt bilgideki özet bildirim. Politika bildirimin yerini veya uzunluğunu
+ * şart koşmuyor — tam metin lisans sayfasındadır, burada özeti durur.
+ * Ayrıntı: Documentation/Decisions/LisansPolitikası.md
+ */
+
+interface Props {
+  dil: Dil;
+  konum: Exclude<RehberKonumu, { tür: "liste" }>;
+}
+
+const { dil, konum } = Astro.props;
+const r = rehberÇevirisi(dil);
+
+// Lisans sayfasının kendisinde bağlantı gösterilmez; okuyucu zaten oradadır.
+const bağlantıGösterilir = konum.tür !== "rehberLisansı";
+---
+
+<p class="lisans-özeti">
+  {r.lisans.özet}{" "}
+  {
+    bağlantıGösterilir && (
+      <a href={rehberLisansYolu(dil, konum.kimlik)}>{r.lisans.bağlantı}</a>
+    )
+  }
+</p>

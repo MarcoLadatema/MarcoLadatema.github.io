@@ -2,13 +2,17 @@
 import type { Dil } from "../i18n/çeviriAraçları";
 import type { çeviriAl } from "../i18n/çeviriAraçları";
 import { bölümYolu, diğerDilYolu } from "../i18n/adresHaritası";
+// Ana sitenin rehbere tek yönlü bağlantısı; ayırma anında bu satır silinir.
+import { rehberBağlantısı } from "../BG3/anaSiteBağlantısı";
 
 interface Props {
   dil: Dil;
   t: ReturnType<typeof çeviriAl>;
+  /** Düzenden gelir; verilmezse adres haritasından hesaplanır (karar 20). */
+  diğerDilAdresi?: string;
 }
 
-const { dil, t } = Astro.props;
+const { dil, t, diğerDilAdresi } = Astro.props;
 const sayfaYolu = decodeURIComponent(Astro.url.pathname);
 const normalleştirilmişYol =
   sayfaYolu.endsWith("/") && sayfaYolu !== `/${dil}/`
@@ -21,11 +25,13 @@ const bağlantılar = [
   { ad: t.gezinti.başarılar, yol: bölümYolu(dil, "başarılar") },
   { ad: t.gezinti.blog, yol: bölümYolu(dil, "blog") },
   { ad: t.gezinti.sosyalMedya, yol: bölümYolu(dil, "sosyalMedya") },
+  rehberBağlantısı(dil),
   { ad: t.gezinti.iletişim, yol: bölümYolu(dil, "iletişim") },
 ];
 
 const diğerDil = dil === "tr" ? "en" : "tr";
-const mevcutYol = await diğerDilYolu(sayfaYolu, diğerDil);
+const mevcutYol =
+  diğerDilAdresi ?? (await diğerDilYolu(sayfaYolu, diğerDil));
 ---
 
 <nav class="gezinti">
@@ -147,17 +153,31 @@ const mevcutYol = await diğerDilYolu(sayfaYolu, diğerDil);
     if (ikon) ikon.className = açıkMı ? "ti ti-x" : "ti ti-menu-2";
   }
 
+  function mobilMenüyüAyarla(açıkMı: boolean) {
+    mobilMenü?.classList.toggle("açık", açıkMı);
+    mobilMenü?.setAttribute("aria-hidden", (!açıkMı).toString());
+    hamburger?.setAttribute("aria-expanded", açıkMı.toString());
+    hamburgerİkonunuGüncelle(açıkMı);
+  }
+
   function mobilMenüyüKapat() {
-    mobilMenü?.classList.remove("açık");
-    hamburger?.setAttribute("aria-expanded", "false");
-    hamburgerİkonunuGüncelle(false);
+    mobilMenüyüAyarla(false);
   }
 
   if (hamburger && mobilMenü) {
     hamburger.addEventListener("click", () => {
-      const açıkMı = mobilMenü.classList.toggle("açık");
-      hamburger.setAttribute("aria-expanded", açıkMı.toString());
-      hamburgerİkonunuGüncelle(açıkMı);
+      mobilMenüyüAyarla(!mobilMenü.classList.contains("açık"));
+    });
+
+    // Menünün ve hamburgerin dışına tıklamak menüyü kapatır; ayarlar
+    // panelindeki davranışın aynısıdır.
+    document.addEventListener("click", (olay) => {
+      if (
+        !mobilMenü.contains(olay.target as Node) &&
+        !hamburger.contains(olay.target as Node)
+      ) {
+        mobilMenüyüKapat();
+      }
     });
   }
 
@@ -169,8 +189,10 @@ const mevcutYol = await diğerDilYolu(sayfaYolu, diğerDil);
   const ayarlarPaneli = document.getElementById("ayarlar-paneli");
 
   if (ayarlarButonu && ayarlarPaneli) {
-    ayarlarButonu.addEventListener("click", (olay) => {
-      olay.stopPropagation();
+    // Tıklama BİLEREK durdurulmaz: aşağıdaki `contains` kontrolü panelin
+    // kendi kendini kapatmasını zaten engelliyor, olayın belgeye ulaşması ise
+    // açık mobil menünün kapanmasını sağlıyor. İki menü aynı anda açılmaz.
+    ayarlarButonu.addEventListener("click", () => {
       const açıkMı = ayarlarPaneli.classList.toggle("açık");
       ayarlarPaneli.setAttribute("aria-hidden", (!açıkMı).toString());
     });
@@ -256,6 +278,8 @@ const mevcutYol = await diğerDilYolu(sayfaYolu, diğerDil);
   // kendi yakınlaştırmasıyla çakışır.
   function yazıBoyutunuUygula(oran: string) {
     document.documentElement.style.fontSize = Number(oran) * 100 + "%";
+    // Kırılma noktası seçilen orana göre değişir; CSS oranı buradan okur.
+    document.documentElement.dataset.boyut = oran;
   }
 
   const kayıtlıBoyut = localStorage.getItem("yazıBoyutu") ?? "1";

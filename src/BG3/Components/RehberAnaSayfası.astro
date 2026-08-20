@@ -1,0 +1,39 @@
+---
+import { getEntry } from "astro:content";
+import type { Dil } from "../../i18n/çeviriAraçları";
+import { rehberlerYolu } from "../adresHaritası";
+import { rehberÇevirisi } from "../çeviri";
+import RehberDüzeni from "./RehberDüzeni.astro";
+
+interface Props {
+  dil: Dil;
+  kimlik: string;
+}
+
+const { dil, kimlik } = Astro.props;
+const r = rehberÇevirisi(dil);
+
+const rehber = await getEntry("rehberler", kimlik);
+if (!rehber) throw new Error(`Rehber kaydı bulunamadı: ${kimlik}`);
+---
+
+<RehberDüzeni
+  başlık={r.bg3.başlık}
+  dil={dil}
+  konum={{ tür: "rehberAna", kimlik }}
+  açıklama={rehber.data[dil].açıklama}
+>
+  <a class="rehber-üst-bağlantı" href={rehberlerYolu(dil)}>
+    <i class="ti ti-arrow-left" aria-hidden="true"></i>
+    {r.liste.başlık}
+  </a>
+
+  <h1>{r.bg3.başlık}</h1>
+  <p class="rehber-giriş">{r.bg3.giriş}</p>
+
+  <div class="rehber-bilgi-kutusu">
+    <h2>{r.bg3.hazırlanıyorBaşlık}</h2>
+    <p>{r.bg3.hazırlanıyorMetin}</p>
+    <p class="rehber-sürüm">{r.bg3.sürüm}</p>
+  </div>
+</RehberDüzeni>

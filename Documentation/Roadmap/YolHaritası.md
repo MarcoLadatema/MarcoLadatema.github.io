@@ -25,7 +25,7 @@ Bunun yerine **dikey dilim** yaklaşımı uygulanır: önce tek bir içerik tür
 
 | Faz | Ad                          | Bağımlılık | Çıktı                                        |
 | --- | --------------------------- | ---------- | -------------------------------------------- |
-| 0   | Kuruluş                     | —          | Website içinde ayrılabilir rehber iskeleti   |
+| 0   | Kuruluş ✅                   | —          | Website içinde ayrılabilir rehber iskeleti   |
 | 1   | Veri Şeması                 | 0          | Doğrulanmış şema tanımları                   |
 | 2   | Veri Çıkarma Altyapısı      | 1          | Ham oyun verisinden JSON üreten hat          |
 | 3   | Dikey Dilim — Sınıflar      | 2          | Uçtan uca çalışan sınıf bölümü               |
@@ -39,22 +39,48 @@ Bunun yerine **dikey dilim** yaklaşımı uygulanır: önce tek bir içerik tür
 
 ---
 
-## Faz 0 — Kuruluş
+## Faz 0 — Kuruluş — **tamamlandı (20 Ağustos 2026)**
 
 **Amaç:** Mevcut Website projesinin içinde, boş ama yayınlanan ve **ayrılabilirlik kuralına uyan** bir rehber iskeleti kurmak. Deploy hattı, i18n yapılandırması ve temel düzen zaten çalışıyor; bu faz onların üzerine rehberin kendi ayrık alanını açar.
 
+**Tasarım kararları:** Bu fazın mimarisi 19 Ağustos 2026'da karara bağlandı — `ProjeKararları.md` 20 (adres haritası), 21 (tek yakalayıcı rota), 22 (üst adres liste sayfası), 23 (kök klasör). Aşağıdaki işler o kararların uygulanmasıdır.
+
 **İşler:**
 
-- Rehber klasörlerinin açılması: `src/content/BG3/`, `src/components/BG3/`, `src/pages/[lang]/oyun-rehberleri/`, `src/styles/bg3/`
-- Rehber şemalarının **ayrı bir dosyada** tanımlanması; `content.config.ts` bu dosyayı yalnızca `import` eder — ayırma anında silinecek şey tek satır olmalıdır
-- Rehber çevirilerinin ana `tr.json` / `en.json` dışında, kendi dosyasında tutulması
-- Dile göre yol farkının slug haritasına bağlanması: `/tr/oyun-rehberleri/bg3` ve `/en/game-guides/bg3` (karar 3)
-- Alt bilgiye WotC/Larian lisans bildiriminin yerleştirilmesi — rehber sayfalarında **zorunlu**
+- Rehberin kök klasörünün açılması ve içinin kurulması:
+
+  ```
+  src/BG3/
+  ├── Components/       rehber bileşenleri
+  ├── Styles/           rehber CSS'i
+  ├── şema.ts           Zod şemaları
+  ├── adresHaritası.ts  rehberin dile göre adres tablosu
+  ├── tr.json           rehber çevirileri
+  └── en.json
+  ```
+
+- `src/content/BG3/` içerik klasörünün açılması
+- `content.config.ts`'e **tek bir `import` satırı** eklenmesi — şema gövdesi ana dosyaya yazılmaz
+- Tek rota dosyası: `src/pages/[dil]/[rehberler]/[...yol].astro`, tüm rehber adreslerini üretir
+- `TemelDüzen` ve `Gezinti`'ye "bu sayfanın diğer dildeki karşılığı" için isteğe bağlı prop eklenmesi; verilmezse bugünkü davranış korunur (karar 20)
+- Rehber listesi sayfası (`/tr/oyun-rehberleri`, `/en/game-guides`) ve BG3 ana sayfası (`/tr/oyun-rehberleri/bg3`, `/en/game-guides/bg3`)
+- Alt bilgiye WotC/Larian lisans bildiriminin yerleştirilmesi — rehber sayfalarında **zorunlu**, özet biçiminde; tam metin kendi lisans sayfasında (karar 25)
 - Ana siteden rehbere bağlantı verilmesi (bağlantı tek yönlüdür; ana site rehberin veri veya bileşenlerine bağımlı olmaz)
 
-**Bağlı olduğu iş:** Slug haritası — **tamamlandı (19 Ağustos 2026)**. Ana site adresleri `src/i18n/adresHaritası.ts` üzerinden üretiliyor; rehber bölümleri bu haritaya `oyunRehberleri` anahtarı eklenerek bağlanır, ayrı bir mekanizma kurulmaz.
+**Bağlı olduğu iş:** Slug haritası — **tamamlandı (19 Ağustos 2026)**.
 
-**Tamamlanma koşulu:** `/tr/oyun-rehberleri/bg3` ve `/en/game-guides/bg3` yayınlanan sitede açılıyor, dil değiştirme rehber sayfaları arasında doğru yola gidiyor, alt bilgi lisans bildirimi görünüyor, `main`'e push otomatik yayınlıyor. Ayrılabilirlik denetimi geçiliyor: `src/content/BG3`, `src/components/BG3`, `src/pages/[lang]/oyun-rehberleri`, `src/styles/bg3` ve rehber şema/çeviri dosyaları silindiğinde ana site tek bir `import` satırının kaldırılmasıyla derleniyor.
+**Tamamlanma koşulu:** Altı adres de yayınlanan sitede açılıyor (`/tr/oyun-rehberleri`, `/tr/oyun-rehberleri/bg3`, `/tr/oyun-rehberleri/bg3/lisans` ve İngilizce karşılıkları), dil değiştirme rehber sayfaları arasında doğru yola gidiyor, alt bilgi lisans özeti görünüyor, `main`'e push otomatik yayınlıyor.
+
+**Ayrılabilirlik denetimi:** `src/BG3/` ve `src/content/BG3/` klasörleri ile tek rota dosyası silindiğinde, ana sitede iki dosyada ikişer satır kaldırılır: `content.config.ts` (import + koleksiyon yayılımı) ve `Gezinti.astro` (import + menü maddesi). Başka hiçbir dosyaya dokunmak gerekmiyor.
+
+### Uygulamada olan sapmalar
+
+- **`src/BG3/çeviri.ts` ve `src/BG3/anaSiteBağlantısı.ts` eklendi.** İskelet listesinde yoklardı. Birincisi rehberin çeviri okuyucusu, ikincisi ana sitenin rehbere açtığı tek kapıdır (karar 24).
+- **Lisans bildirimi prop değil slot ile taşınıyor.** `TemelDüzen` ve `AltBilgi`, `altBilgiEki` adlı isteğe bağlı bir slot kazandı. Metin rehberin çevirisinden geldiği için ana sitenin onu görmesi gerekmiyor; slot, prop'tan daha az bilgi sızdırır. Slot adı rehbere özgü değildir — "lisans" kelimesi ana sitede hiç geçmez.
+- **`src/content/BG3/bg3.json` tanıtım kaydı eklendi.** Liste sayfasının kartı buradan beslenir; koleksiyon boş kalsaydı Astro uyarı verirdi. Şema `*.json` deseniyle yalnızca kök seviyeyi tarar, böylece Faz 1'de açılacak alt klasörler bu koleksiyona karışmaz.
+- **Gezinti kırılma noktası metin boyutuna bağlandı.** Menünün yedinci maddesi 1.15× boyutta taşmaya yol açıyordu; ayrıntı ve ölçümler karar 24'te.
+
+**Faz 1'e taşınan:** `şema.ts` yalnızca tanıtım kaydının şemasını taşıyor. İçerik türlerinin şemaları dosyadaki `TODO` etiketinde işaretlendi.
 
 ---
 

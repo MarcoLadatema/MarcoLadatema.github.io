@@ -1,0 +1,42 @@
+---
+import "../Styles/rehber.css";
+import type { Dil } from "../../i18n/çeviriAraçları";
+import { rehberKonumYolu, type RehberKonumu } from "../adresHaritası";
+import TemelDüzen from "../../layouts/TemelDüzen.astro";
+import LisansBildirimi from "./LisansBildirimi.astro";
+
+/**
+ * Rehber sayfalarının ortak sarmalayıcısı. Ana düzene iki şey ekler: diğer
+ * dildeki karşılığın adresi (ana harita rehberi tanımadığı için) ve alt
+ * bilgideki lisans özeti.
+ *
+ * Özet liste sayfasında görünmez: orası hangi rehberlerin bulunduğunu
+ * söylemekten başka bir şey yapmaz, WotC veya Larian materyali taşımaz.
+ * Ayrım şablonda doğrudan yapılır — konumun türü aynı zamanda `kimlik`
+ * alanının varlığını da daraltır.
+ */
+
+interface Props {
+  başlık: string;
+  dil: Dil;
+  konum: RehberKonumu;
+  açıklama?: string;
+}
+
+const { başlık, dil, konum, açıklama } = Astro.props;
+const diğerDil: Dil = dil === "tr" ? "en" : "tr";
+---
+
+<TemelDüzen
+  başlık={başlık}
+  dil={dil}
+  açıklama={açıklama}
+  diğerDilAdresi={rehberKonumYolu(diğerDil, konum)}
+>
+  <slot />
+  {
+    konum.tür !== "liste" && (
+      <LisansBildirimi dil={dil} konum={konum} slot="altBilgiEki" />
+    )
+  }
+</TemelDüzen>

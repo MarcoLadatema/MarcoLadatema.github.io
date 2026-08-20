@@ -27,7 +27,7 @@ pnpm-debug.log*
 Website.html
 
 # Claude Code yerel hafıza, oturum arşivi ve kişisel ayarlar
-# .claude/settings.json paylaşılan proje ayarıdır ve depoya dahildir.
+# .claude/settings.json ve .claude/launch.json paylaşılan proje ayarlarıdır ve
+# depoya dahildir; aşağıdakiler ise makineye özgüdür ve dışarıda kalır.
 .claude/Memory/
 .claude/Arşiv/
-.claude/settings.local.json

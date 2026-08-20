@@ -14,9 +14,15 @@ interface Props {
   dil: Dil;
   açıklama?: string;
   ogGörsel?: string;
+  /**
+   * Bu sayfanın diğer dildeki karşılığı. Ana site bölümleri için gerekmez —
+   * verilmezse adres haritasından hesaplanır. Ana sitenin dışında yaşayan
+   * sayfalar kendi karşılığını buradan bildirir (karar 20).
+   */
+  diğerDilAdresi?: string;
 }
 
-const { başlık, dil, açıklama, ogGörsel } = Astro.props;
+const { başlık, dil, açıklama, ogGörsel, diğerDilAdresi } = Astro.props;
 const ogGörselUrl = new URL(
   ogGörsel ?? "/assets/og-varsayılan.png",
   Astro.site,
@@ -38,12 +44,12 @@ function dizinBiçimine(yol: string): string {
   return yol.endsWith("/") ? yol : `${yol}/`;
 }
 
-const türkçeYol = dizinBiçimine(
-  dil === "tr" ? sayfaYolu : await diğerDilYolu(sayfaYolu, "tr"),
-);
-const ingilizceYol = dizinBiçimine(
-  dil === "en" ? sayfaYolu : await diğerDilYolu(sayfaYolu, "en"),
-);
+const diğerDil: Dil = dil === "tr" ? "en" : "tr";
+const diğerYol =
+  diğerDilAdresi ?? (await diğerDilYolu(sayfaYolu, diğerDil));
+
+const türkçeYol = dizinBiçimine(dil === "tr" ? sayfaYolu : diğerYol);
+const ingilizceYol = dizinBiçimine(dil === "en" ? sayfaYolu : diğerYol);
 ---
 
 <!doctype html>
@@ -91,11 +97,13 @@ const ingilizceYol = dizinBiçimine(
   </head>
   <body>
     <YükleniyorAnimasyon />
-    <Gezinti dil={dil} t={t} />
+    <Gezinti dil={dil} t={t} diğerDilAdresi={diğerDilAdresi} />
     <main>
       <slot />
     </main>
-    <AltBilgi dil={dil} t={t} />
+    <AltBilgi dil={dil} t={t}>
+      <slot name="altBilgiEki" slot="altBilgiEki" />
+    </AltBilgi>
     <HenüzHazırDeğilPopup dil={dil} />
   </body>
 </html>

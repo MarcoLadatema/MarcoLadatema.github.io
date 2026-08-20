@@ -1,0 +1,31 @@
+{
+  "liste": {
+    "başlık": "Game Guides",
+    "açıklama": "Detailed guides for the games I play."
+  },
+  "durum": {
+    "hazırlanıyor": "In progress",
+    "yayında": "Published"
+  },
+  "bg3": {
+    "başlık": "Baldur's Gate 3 Guide",
+    "giriş": "This guide collects the game's classes, spells, items and permanent upgrades in one place. Mechanical data is generated from the game's own files; the texts use the game's official terminology.",
+    "hazırlanıyorBaşlık": "Guide in progress",
+    "hazırlanıyorMetin": "Only the skeleton is in place for now. Content sections will go live one by one.",
+    "sürüm": "Base version: Patch 8 / Hotfix #36"
+  },
+  "lisans": {
+    "özet": "Unofficial Fan Content. Baldur's Gate 3 is owned by Larian Studios; D&D content by Wizards of the Coast.",
+    "bağlantı": "License",
+    "sayfaBaşlık": "License",
+    "sayfaGiriş": "This guide is a fan work and is subject to three separate policies at once. The notices below are repeated in summary form in the footer of every guide page.",
+    "wotcBaşlık": "Wizards of the Coast — Fan Content Policy",
+    "özgünKalıpBaşlık": "Original wording published by the policy",
+    "larianBaşlık": "Larian Studios — BG3 Fan Content Terms",
+    "larianBildirim": "Baldur's Gate 3 is owned by Larian Studios. This site is unofficial and is not endorsed by Larian Studios or Wizards of the Coast.",
+    "ticariBaşlık": "Non-commercial use",
+    "ticariMetin": "The guide is free. It carries no advertising, sponsorship, donation link or paid tier.",
+    "kaynakBaşlık": "Game content",
+    "kaynakMetin": "Mechanical data and icons are extracted from the game's own files and used as fan content. Copyright marks on icons are left untouched. The prose is our own and is not copied verbatim from other fan sources."
+  }
+}

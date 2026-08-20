@@ -13,6 +13,11 @@ export function getStaticPaths() {
 const dil = dilAl(Astro.url);
 const t = çeviriAl(dil);
 
+// Sloganın vurgulanan kelimesi çeviride {vurgu} ile işaretlenir. Boşluk ve
+// noktalama cümlenin parçasıdır ve dile göre değişir — İngilizcede vurgudan
+// sonra doğrudan nokta gelirken Türkçede boşluk gelir.
+const [vurguÖncesi, vurguSonrası] = t.anaSayfa.slogan2.split("{vurgu}");
+
 const tümProjeler = await getCollection("projeler");
 const öneCıkanProjeler = tümProjeler
   .filter((p) => p.id === "steady-study" || p.id === "ders-takip")
@@ -32,9 +37,7 @@ const öneCıkanProjeler = tümProjeler
   <section class="karşılama">
     <h1 class="karşılama-başlık">
       {t.anaSayfa.slogan1}<br />
-      {t.anaSayfa.slogan2}
-      <span>{t.anaSayfa.sloganVurgu}</span>
-      {t.anaSayfa.slogan3}
+      {vurguÖncesi}<span>{t.anaSayfa.sloganVurgu}</span>{vurguSonrası}
     </h1>
     <p class="karşılama-alt-başlık">{t.anaSayfa.altBaşlık}</p>
   </section>

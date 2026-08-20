@@ -234,6 +234,10 @@
 /* #region Boyut Toggle */
 
 .boyut-toggle {
+  /* Harf kutusunun yüksekliği en büyük harfe eşitlenir; üç seçenekte de aynı
+     alan ayrıldığı için etiketler aynı hizaya oturur. */
+  --boyut-harf-alanı: 1.25rem;
+
   display: flex;
   background: var(--renk-arkaplan);
   border: 1px solid var(--renk-kenar);
@@ -246,6 +250,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  justify-content: center;
   gap: 4px;
   padding: 0.6rem 0.25rem;
   background: none;
@@ -270,6 +275,10 @@
 }
 
 .boyut-harf {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--boyut-harf-alanı);
   font-family: var(--font-başlık);
   font-weight: 600;
   line-height: 1;
@@ -282,7 +291,7 @@
   font-size: 1rem;
 }
 .boyut-seçenek:nth-child(3) .boyut-harf {
-  font-size: 1.25rem;
+  font-size: var(--boyut-harf-alanı);
 }
 
 /* #endregion */
@@ -343,16 +352,57 @@
 /* #endregion */
 /* #region Mobil */
 
-@media (max-width: 900px) {
-  .gezinti {
+/*
+ * Mobil menüye geçiş eşiği seçilen metin boyutuna bağlıdır. Menünün ihtiyacı
+ * boyutla birlikte büyür (0.85× → 813 px, 1× → 946 px, 1.15× → 1078 px) ama
+ * medya sorguları kök yazı boyutunu GÖRMEZ: sorgudaki `rem` bile tarayıcının
+ * varsayılanına göre çözülür. Bu yüzden seçilen oran `<html>` üzerine yazılır
+ * ve her oran kendi eşiğini kullanır. Oran daha yazılmamışken (betik çalışmadan
+ * önce) normal boyutun eşiği geçerlidir.
+ */
+
+@media (max-width: 830px) {
+  html[data-boyut="0.85"] .gezinti {
     padding: 0 1rem;
   }
 
-  .gezinti-menü {
+  html[data-boyut="0.85"] .gezinti-menü {
     display: none;
   }
 
-  .hamburger {
+  html[data-boyut="0.85"] .hamburger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 960px) {
+  html:not([data-boyut="0.85"]):not([data-boyut="1.15"]) .gezinti {
+    padding: 0 1rem;
+  }
+
+  html:not([data-boyut="0.85"]):not([data-boyut="1.15"]) .gezinti-menü {
+    display: none;
+  }
+
+  html:not([data-boyut="0.85"]):not([data-boyut="1.15"]) .hamburger {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+}
+
+@media (max-width: 1090px) {
+  html[data-boyut="1.15"] .gezinti {
+    padding: 0 1rem;
+  }
+
+  html[data-boyut="1.15"] .gezinti-menü {
+    display: none;
+  }
+
+  html[data-boyut="1.15"] .hamburger {
     display: flex;
     align-items: center;
     justify-content: center;

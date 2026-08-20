@@ -23,9 +23,8 @@
 
   "anaSayfa": {
     "slogan1": "Turning dreams into systems,",
-    "slogan2": "systems into",
+    "slogan2": "systems into {vurgu}.",
     "sloganVurgu": "game",
-    "slogan3": ".",
     "altBaşlık": "Developer. Builder. Gamer.",
     "hakkımda": "About",
     "hakkımdaMetin1": "I've always had games, systems, and ideas in my mind. While trying to mod games in middle and high school, I realized something: creating is more enjoyable than playing.",

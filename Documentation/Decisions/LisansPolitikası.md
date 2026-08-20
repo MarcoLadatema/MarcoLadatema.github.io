@@ -75,11 +75,32 @@ Mekanik veri ve ikonlar oyun dosyalarından çıkarılır. Bunlar katman 2 kapsa
 
 ### Zorunlu bildirim
 
-Sitenin her sayfasında görünen bir alanda (alt bilgi) aşağıdaki bildirim yer alır. WotC politikasının istediği kalıp İngilizce olduğu için özgün hâliyle korunur, Türkçe açıklaması yanına eklenir:
+**Politikanın yayımladığı kalıp** (20 Ağustos 2026'da resmî metinden doğrulandı):
 
-> Baldur's Gate 3 Rehberi is unofficial Fan Content permitted under the Wizards of the Coast Fan Content Policy. Not approved/endorsed by Wizards. Portions of the materials used are property of Wizards of the Coast LLC.
->
-> Baldur's Gate 3, Larian Studios'a aittir. Bu site resmî değildir; Larian Studios veya Wizards of the Coast tarafından onaylanmamıştır. Ticari amaç taşımaz.
+> [Title of your Fan Content] is unofficial Fan Content permitted under the Fan Content Policy. Not approved/endorsed by Wizards. Portions of the materials used are property of Wizards of the Coast. ©Wizards of the Coast LLC.
+
+Politika bu kalıbı verirken yalnızca şunu söyler: _"Please include a note with your Fan Content explaining that…"_. **Dil ve yerleşim konusunda hiçbir şart koymaz** — çeviriyi yasaklamaz, bildirimin her sayfada tam metin olarak bulunmasını da istemez. Bu iki boşluk aşağıdaki düzenlemeyi mümkün kılar.
+
+**Sitedeki düzenleme:**
+
+| Yer | İçerik |
+| --- | --- |
+| Her rehber sayfasının alt bilgisi | Sayfanın dilinde **tek cümlelik özet** ve lisans sayfasına bağlantı |
+| Lisans sayfası (`/tr/oyun-rehberleri/bg3/lisans`) | Kalıbın tam metni, sayfanın dilinde |
+| Lisans sayfası, Türkçe | Özgün İngilizce kalıp ayrıca açılır bir blokta durur |
+| Rehber liste sayfası | Bildirim **yoktur** — orada WotC veya Larian materyali gösterilmez |
+
+Türkçe karşılık:
+
+> Baldur's Gate 3 Rehberi, Fan Content Policy kapsamında izin verilen, resmî olmayan hayran içeriğidir. Wizards tarafından onaylanmamış veya desteklenmemiştir. Kullanılan materyallerin bir bölümü Wizards of the Coast'un mülkiyetindedir. ©Wizards of the Coast LLC
+
+Larian bildirimi de sayfanın dilinde gösterilir:
+
+> Baldur's Gate 3, Larian Studios'a aittir. Bu site resmî değildir; Larian Studios veya Wizards of the Coast tarafından onaylanmamıştır.
+
+Metinlerin kod içindeki tek kaynağı `src/BG3/lisans.ts` dosyasıdır; arayüz kopyasıyla karışmaz.
+
+**Doğrulanamayan:** Larian'ın fan içerik sayfası (`larian.com/fan-content-policy`) otomatik erişime 403 döndürüyor. Katman 2'nin beş kuralı bu belgede daha önce kayda geçmiş hâliyle geçerlidir; Larian'ın belirli bir kalıp dayattığına dair bir kayıt yoktur.
 
 ---
 

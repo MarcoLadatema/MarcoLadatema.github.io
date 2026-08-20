@@ -1,0 +1,171 @@
+/* #region Rehber listesi */
+
+.rehber-giriş {
+  max-width: 46rem;
+  color: var(--renk-metin-ikincil);
+  margin-bottom: 2rem;
+}
+
+.rehber-kart-listesi {
+  display: grid;
+  gap: 1rem;
+}
+
+.rehber-kartı {
+  display: grid;
+  grid-template-columns: auto 1fr auto;
+  align-items: center;
+  gap: 1.25rem;
+  padding: 1.25rem 1.5rem;
+  background: var(--renk-yüzey);
+  border: 1px solid var(--renk-kenar);
+  border-radius: var(--yarıçap);
+  color: var(--renk-metin);
+  text-decoration: none;
+  transition:
+    border-color var(--geçiş),
+    transform var(--geçiş);
+}
+
+.rehber-kartı:hover {
+  border-color: var(--renk-vurgu);
+  transform: translateY(-2px);
+  color: var(--renk-metin);
+}
+
+.rehber-kartı > i {
+  font-size: 2rem;
+  color: var(--renk-vurgu);
+}
+
+.rehber-kartı-gövde h2 {
+  margin: 0 0 0.25rem;
+  font-size: 1.25rem;
+}
+
+.rehber-kartı-gövde p {
+  margin: 0;
+  color: var(--renk-metin-ikincil);
+  font-size: 0.95rem;
+}
+
+.rehber-durumu {
+  padding: 0.25rem 0.75rem;
+  border-radius: 999px;
+  font-size: 0.8rem;
+  white-space: nowrap;
+  border: 1px solid var(--renk-kenar);
+  color: var(--renk-metin-ikincil);
+}
+
+.rehber-durumu[data-durum="yayında"] {
+  border-color: var(--renk-vurgu);
+  color: var(--renk-vurgu);
+}
+
+/* #endregion */
+
+/* #region Rehber ana sayfası */
+
+.rehber-üst-bağlantı {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  margin-bottom: 1rem;
+  font-size: 0.9rem;
+  color: var(--renk-metin-ikincil);
+  text-decoration: none;
+}
+
+.rehber-üst-bağlantı:hover {
+  color: var(--renk-vurgu);
+}
+
+.rehber-bilgi-kutusu {
+  padding: 1.5rem;
+  background: var(--renk-yüzey);
+  border: 1px solid var(--renk-kenar);
+  border-left: 3px solid var(--renk-vurgu);
+  border-radius: var(--yarıçap);
+  max-width: 46rem;
+}
+
+.rehber-bilgi-kutusu h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.1rem;
+}
+
+.rehber-bilgi-kutusu p {
+  margin: 0;
+  color: var(--renk-metin-ikincil);
+}
+
+.rehber-bilgi-kutusu .rehber-sürüm {
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+}
+
+/* #endregion */
+
+/* #region Alt bilgi lisans özeti */
+
+.lisans-özeti {
+  max-width: 52rem;
+  margin: 0.5rem auto 0;
+  font-size: 0.75rem;
+  line-height: 1.6;
+  color: var(--renk-metin-ikincil);
+}
+
+.lisans-özeti a {
+  white-space: nowrap;
+}
+
+/* #endregion */
+
+/* #region Lisans sayfası */
+
+.lisans-bölümü {
+  max-width: 46rem;
+  margin-bottom: 2rem;
+}
+
+.lisans-bölümü h2 {
+  margin: 0 0 0.5rem;
+  font-size: 1.05rem;
+  color: var(--renk-vurgu);
+}
+
+.lisans-bölümü p {
+  margin: 0;
+  color: var(--renk-metin-ikincil);
+}
+
+.lisans-bildirimi {
+  padding: 1rem 1.25rem;
+  background: var(--renk-yüzey);
+  border: 1px solid var(--renk-kenar);
+  border-radius: var(--yarıçap);
+}
+
+.lisans-özgün {
+  margin-top: 0.75rem;
+  font-size: 0.85rem;
+}
+
+.lisans-özgün summary {
+  cursor: pointer;
+  color: var(--renk-metin-ikincil);
+}
+
+.lisans-özgün summary:hover {
+  color: var(--renk-vurgu);
+}
+
+.lisans-özgün p {
+  margin-top: 0.5rem;
+  padding-left: 1rem;
+  border-left: 2px solid var(--renk-kenar);
+}
+
+/* #endregion */

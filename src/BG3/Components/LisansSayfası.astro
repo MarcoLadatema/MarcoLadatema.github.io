@@ -1,0 +1,64 @@
+---
+import type { Dil } from "../../i18n/çeviriAraçları";
+import { rehberAnaYolu } from "../adresHaritası";
+import { rehberÇevirisi } from "../çeviri";
+import {
+  WOTC_KALIBI,
+  wotcBildirimi,
+  özgünKalıpAyrıcaGösterilsinMi,
+} from "../lisans";
+import RehberDüzeni from "./RehberDüzeni.astro";
+
+interface Props {
+  dil: Dil;
+  kimlik: string;
+}
+
+const { dil, kimlik } = Astro.props;
+const r = rehberÇevirisi(dil);
+const t = rehberÇevirisi(dil).bg3;
+---
+
+<RehberDüzeni
+  başlık={r.lisans.sayfaBaşlık}
+  dil={dil}
+  konum={{ tür: "rehberLisansı", kimlik }}
+  açıklama={r.lisans.sayfaGiriş}
+>
+  <a class="rehber-üst-bağlantı" href={rehberAnaYolu(dil, kimlik)}>
+    <i class="ti ti-arrow-left" aria-hidden="true"></i>
+    {t.başlık}
+  </a>
+
+  <h1>{r.lisans.sayfaBaşlık}</h1>
+  <p class="rehber-giriş">{r.lisans.sayfaGiriş}</p>
+
+  <section class="lisans-bölümü">
+    <h2>{r.lisans.wotcBaşlık}</h2>
+    <p class="lisans-bildirimi">{wotcBildirimi(dil)}</p>
+
+    {
+      özgünKalıpAyrıcaGösterilsinMi(dil) && (
+        <details class="lisans-özgün">
+          <summary>{r.lisans.özgünKalıpBaşlık}</summary>
+          <p lang="en">{WOTC_KALIBI}</p>
+        </details>
+      )
+    }
+  </section>
+
+  <section class="lisans-bölümü">
+    <h2>{r.lisans.larianBaşlık}</h2>
+    <p class="lisans-bildirimi">{r.lisans.larianBildirim}</p>
+  </section>
+
+  <section class="lisans-bölümü">
+    <h2>{r.lisans.ticariBaşlık}</h2>
+    <p>{r.lisans.ticariMetin}</p>
+  </section>
+
+  <section class="lisans-bölümü">
+    <h2>{r.lisans.kaynakBaşlık}</h2>
+    <p>{r.lisans.kaynakMetin}</p>
+  </section>
+</RehberDüzeni>
